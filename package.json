@@ -6,54 +6,56 @@
 		"url": "https://github.com/jay0815/react-echart/issues"
 	},
 	"author": "jackqiangc@gmail.com",
-  "homepage": "https://github.com/jay0815/react-echart#readme",
-  "license": "MIT",
-  "private": false,
-  "main": "cjs/index.js",
-  "module": "esm/index.js",
-  "types": "typings/index.d.ts",
-  "files": [
-    "cjs",
-    "esm",
-    "typings",
-    "src"
-  ],
-  "scripts": {
-    "cjs": "tsc -p cjs.tsconfig.json",
-    "esm": "tsc -p esm.tsconfig.json",
-    "declare": "tsc -p declare.tsconfig.json",
-    "build": "pnpm run clean && pnpm run cjs && pnpm run esm && pnpm run declare",
-    "clean": "rimraf cjs esm typings",
-    "pre:build": "pnpm run clean",
-    "update:patch": "pnpm version patch",
-    "update:minor": "pnpm version minor",
-    "update:major": "pnpm version major"
-  },
-  "peerDependencies": {
-    "@types/react": ">=16.9.0",
-    "@types/react-dom": ">=16.9.0",
-    "echarts": "^5.3.3",
-    "react": ">=16.9.0",
-    "react-dom": ">=16.9.0"
-  },
-  "devDependencies": {
-    "@types/react": "^18.0.15",
-    "@types/react-dom": "^18.0.6",
-    "@typescript-eslint/eslint-plugin": "^5.13.0",
-    "@typescript-eslint/parser": "^5.13.0",
-    "echarts": "^5.3.3",
-    "eslint": "^8.10.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-config-standard": "^17.0.0-1",
-    "eslint-plugin-import": "^2.25.4",
-    "eslint-plugin-n": "^15.0.1",
-    "eslint-plugin-promise": "^6.0.0",
-    "eslint-plugin-react": "^7.29.3",
-    "eslint-plugin-react-hooks": "^4.3.0",
-    "prettier": "^2.4.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "rimraf": "^3.0.2",
-    "typescript": "^4.6.3"
-  }
+	"homepage": "https://github.com/jay0815/react-echart#readme",
+	"license": "MIT",
+	"private": false,
+	"main": "cjs/index.js",
+	"module": "esm/index.js",
+	"types": "typings/index.d.ts",
+	"files": [
+		"cjs",
+		"esm",
+		"typings",
+		"src"
+	],
+	"scripts": {
+		"cjs": "tsc -p cjs.tsconfig.json",
+		"esm": "tsc -p esm.tsconfig.json",
+		"declare": "tsc -p declare.tsconfig.json",
+		"build": "pnpm run check && pnpm run clean && pnpm run cjs && pnpm run esm && pnpm run declare",
+		"clean": "rimraf cjs esm typings",
+		"pre:build": "pnpm run clean",
+		"update:patch": "pnpm version patch",
+		"update:minor": "pnpm version minor",
+		"update:major": "pnpm version major",
+		"check": "tsc --noEmit"
+	},
+	"peerDependencies": {
+		"@types/react": ">=16.9.0",
+		"@types/react-dom": ">=16.9.0",
+		"echarts": "^5.3.3",
+		"react": ">=16.9.0",
+		"react-dom": ">=16.9.0"
+	},
+	"devDependencies": {
+		"@types/react": "^18.0.15",
+		"@types/react-dom": "^18.0.6",
+		"@typescript-eslint/eslint-plugin": "^5.13.0",
+		"@typescript-eslint/parser": "^5.13.0",
+		"echarts": "^5.3.3",
+		"eslint": "^8.10.0",
+		"eslint-config-prettier": "^8.5.0",
+		"eslint-config-standard": "^17.0.0-1",
+		"eslint-plugin-import": "^2.25.4",
+		"eslint-plugin-n": "^15.0.1",
+		"eslint-plugin-promise": "^6.0.0",
+		"eslint-plugin-react": "^7.29.3",
+		"eslint-plugin-react-hooks": "^4.3.0",
+		"prettier": "^2.4.0",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"rimraf": "^3.0.2",
+		"tslib": "^2.4.0",
+		"typescript": "^4.6.3"
+	}
 }
