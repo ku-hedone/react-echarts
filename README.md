@@ -116,6 +116,5 @@ clone locally:
 ```bash
 $ git clone git@github.com:jay0815/react-echart.git
 $ cd react-echart
-$ yarn install
-$ yarn add echart react react-dom @types/react @types/react-dom -P
+$ pnpm install
 ```
