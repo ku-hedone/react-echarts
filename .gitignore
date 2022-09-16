@@ -1,0 +1,5 @@
+node_modules/
+cjs/
+esm/
+typings/
+yarn-error.log
