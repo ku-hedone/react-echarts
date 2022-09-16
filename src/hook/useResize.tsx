@@ -1,6 +1,5 @@
 import { useLayoutEffect, useRef, RefObject } from 'react';
 import { useDebouncedCallback } from './useDebouncedCallback';
-// import ResizeObserver from 'resize-observer-polyfill';
 
 export const useResize = ({
 	ref,
