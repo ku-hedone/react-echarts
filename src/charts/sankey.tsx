@@ -1,6 +1,4 @@
-import { useRef } from 'react';
 import { SankeyChart } from 'echarts/charts';
-import { applyExtensions } from '../utils/extensions';
 import Adapter from '../adapter';
 import type { FC } from 'react';
 import type { ComposeOption } from 'echarts/core';
@@ -11,12 +9,10 @@ type EChartsOption = ComposeOption<SankeySeriesOption | ExtensionsComponent>;
 export interface SankeyProps extends EchartsProps<EChartsOption> {}
 
 const Sankey: FC<SankeyProps> = (props) => {
-
-	const use = useRef(applyExtensions([SankeyChart]));
 	
 	return (
 		<Adapter
-			use={use}
+			use={[SankeyChart]}
 			{...props}
 		/>
 	);

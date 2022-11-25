@@ -10,9 +10,16 @@ import type {
 	GraphicComponentOption,
 } from 'echarts/components';
 import type { ECharts } from 'echarts/core';
-import type { EChartsOption } from 'echarts/types/dist/shared';
+import type {
+	EChartsOption,
+	ComposeOption,
+} from 'echarts/types/dist/shared';
 import type { CSSProperties } from 'react';
 import type { EchartsEventSource } from './event';
+
+/**
+ * echarts extensions' type
+ */
 interface LoadingOptions {
 	/**
 	 * default loading
@@ -150,3 +157,5 @@ export type ExtensionsKeyValue = Pick<
 >;
 
 export type ChartType = typeof ChartTypes[number];
+
+export type AdapterEChartsOption = ComposeOption<ExtensionsComponent>;

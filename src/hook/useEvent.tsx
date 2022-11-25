@@ -1,9 +1,7 @@
 import { useCallback, useRef, version } from 'react';
 
 type MemoFunction = (...args: any[]) => unknown;
-// experiment
-// prepare for useEvent
-// in order to replace use useCallback wrapper function
+
 const useLowerLevelReactEvent = <T extends MemoFunction>(callback: T): T => {
 	const fnRef = useRef<T>();
 

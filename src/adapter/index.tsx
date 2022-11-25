@@ -1,21 +1,17 @@
-import { useMemo, memo } from 'react';
+import { memo, useMemo } from 'react';
 import Core from '../core';
 import { startWith } from '../utils/event';
-import type { MutableRefObject } from 'react';
-import type { Extensions } from '../core';
-import type { ComposeOption } from 'echarts/core';
-import type { EchartsProps, ExtensionsComponent, ExtensionsKeyValue } from '../types/base';
+import useExtensions from '../hook/useExtensions';
+import type { AdapterEChartsOption, EchartsProps } from '../types/base';
 import type { OmitEventOnSymbol, RecordToArray } from '../types/event';
+import type { Extensions } from '../utils/extensions';
 
-type AdapterEChartsOption = ComposeOption<ExtensionsComponent>;
-
-export interface AdapterProps<T extends (options: ExtensionsKeyValue) => Promise<Extensions>>
-	extends EchartsProps<AdapterEChartsOption> {
-	use: MutableRefObject<T>;
+export interface AdapterProps extends EchartsProps<AdapterEChartsOption> {
+	use: Extensions;
 }
 
-export const Adapter = memo(
-	<T extends (options: ExtensionsKeyValue) => Promise<Extensions>>({
+export const Adapter = 
+	memo(({
 		options,
 		use,
 		onFinish,
@@ -27,33 +23,11 @@ export const Adapter = memo(
 		showLoading,
 		debounceDelay,
 		...other
-	}: AdapterProps<T>) => {
+	}: AdapterProps) => {
 		/**
 		 * use extensions by options' attribute
 		 */
-		const extensions = useMemo(async () => {
-			const exts = await use.current({
-				title: options.title,
-				toolbox: options.toolbox,
-				tooltip: options.tooltip,
-				legend: options.legend,
-				grid: options.grid,
-				visualMap: options.visualMap,
-				dataset: options.dataset,
-				graphic: options.graphic,
-			});
-			return exts;
-		}, [
-			options.dataset,
-			options.grid,
-			options.legend,
-			options.title,
-			options.toolbox,
-			options.tooltip,
-			options.visualMap,
-			options.graphic,
-			use,
-		]);
+		const { extensions, finished } = useExtensions(options, use);
 		/**
 		 * pick and transform event' props to array type
 		 *
@@ -98,9 +72,10 @@ export const Adapter = memo(
 				debounceDelay={debounceDelay}
 				onFinish={onFinish}
 				events={events}
+				finished={finished}
 			/>
 		);
-	},
-);
+})
+;
 
 export default Adapter;

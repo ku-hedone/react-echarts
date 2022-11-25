@@ -1,13 +1,19 @@
 import { LabelLayout } from 'echarts/features';
+import { use } from 'echarts/types/dist/shared';
 import type { ExtensionsKeyValue } from '../types/base';
+
+export type Extensions = Parameters<typeof use>[0];
 /**
  * decide and apply extensions to echarts according to options' attributes
- * 
+ *
  * @param extensions init extensions
  * @returns final extensions
  */
-export const applyExtensions = <T extends unknown[]>(extensions: T) => async (options: ExtensionsKeyValue) => {
-		const ext = Array.isArray(extensions) ? [...extensions] : [extensions];
+const applyExt =
+	(extensions: unknown) => async (options: ExtensionsKeyValue) => {
+		const ext = Array.isArray(extensions)
+			? [...extensions]
+			: [extensions];
 		if (options.grid) {
 			const GridComponent = await import('../components/GridComponent');
 			ext.push(GridComponent.default);
@@ -47,3 +53,5 @@ export const applyExtensions = <T extends unknown[]>(extensions: T) => async (op
 		ext.push(LabelLayout);
 		return ext;
 	};
+
+export default applyExt;

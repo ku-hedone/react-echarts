@@ -8,16 +8,13 @@ import type { ECharts } from 'echarts/core';
 import type { EChartsOption } from 'echarts/types/dist/shared';
 import type { EchartsProps } from '../types/base';
 import type { EchartsEventName, RecordToArray } from '../types/event';
-
-/**
- * echarts extensions' type
- */
-export type Extensions = Parameters<typeof use>[0];
+import type { Extensions } from '../utils/extensions';
 
 interface ReactEchartProps extends Omit<EchartsProps<EChartsOption>, EchartsEventName> {
 	readonly options: EChartsOption;
-	extensions?: Promise<Extensions>;
+	extensions: Extensions;
 	events: RecordToArray;
+	finished: boolean;
 }
 
 use([CanvasRenderer]);
@@ -46,9 +43,9 @@ export const Core: FC<ReactEchartProps> = memo(
 		extensions,
 		onFinish,
 		events,
+		finished,
 	}) => {
 		// TODO: use Sequence Component to change into sync coding style
-		// now extensions is use async/await way to apply
 		// so need a flag to control render
 		const [isUpdatePreparation, setUpdatePreparation] = useState(false);
 		const ref = useRef<HTMLDivElement>(null);
@@ -82,12 +79,10 @@ export const Core: FC<ReactEchartProps> = memo(
 		 * when extensions or theme changed, re-init echart
 		 */
 		// TODO optimize into compare ref
-		const initEchart = useCallback(async () => {
-			if (ref.current) {
-				const exts = await extensions;
-				if (Array.isArray(exts) && exts.length) {
-					use(exts);
-				}
+		const initEchart = useCallback(() => {
+			if (ref.current && finished) {
+				// finished means that all extensions has downloaded
+				use(extensions);
 				/**
 				 * now, initEchart will also be activated by other props
 				 * such as
@@ -106,9 +101,9 @@ export const Core: FC<ReactEchartProps> = memo(
 				}
 				/**
 				 * use element width and height init echart instance
-				 * 
+				 *
 				 * ref may be cleared by user in runtime every moment
-				 * 
+				 *
 				 * so need prevent ref clear into empty
 				 */
 				if (ref.current) {
@@ -122,9 +117,8 @@ export const Core: FC<ReactEchartProps> = memo(
 					instance.current = getInstanceByDom(ref.current);
 					setUpdatePreparation(true);
 				}
-
 			}
-		}, [extensions, theme]);
+		}, [extensions, theme, finished]);
 		/**
 		 * when inline style or className changed, resize
 		 */
@@ -141,7 +135,6 @@ export const Core: FC<ReactEchartProps> = memo(
 				}
 			}
 			isFirstResize.current = false;
-			console.log('react echart resize');
 		};
 		/**
 		 * use Resize Observer as chart size trigger

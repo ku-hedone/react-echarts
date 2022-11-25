@@ -1,7 +1,5 @@
-import { useRef } from 'react';
 import { GridComponent } from 'echarts/components';
 import { BarChart } from 'echarts/charts';
-import { applyExtensions } from '../utils/extensions';
 import Adapter from '../adapter';
 import type { FC } from 'react';
 import type { BarSeriesOption } from 'echarts/charts';
@@ -12,13 +10,13 @@ type EChartsOption = ComposeOption<BarSeriesOption | ExtensionsComponent>;
 
 export interface BarProps extends EchartsProps<EChartsOption> {}
 
+const BarExtensions = [GridComponent, BarChart];
+
 const Bar: FC<BarProps> = (props) => {
 	
-	const use = useRef(applyExtensions([GridComponent, BarChart]));
-
 	return (
 		<Adapter
-			use={use}
+			use={BarExtensions}
 			{...props}
 		/>
 	);

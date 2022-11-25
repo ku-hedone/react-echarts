@@ -1,20 +1,36 @@
-import { useRef } from 'react';
-import { applyExtensions } from '../utils/extensions';
-import Adapter from '../adapter';
+import GraphicComponent from '../components/GraphicComponent';
+import Core from '../core';
 import type { EchartsProps } from '../types/base';
 import type { FC } from 'react';
 import type { EChartsOption } from 'echarts/types/dist/shared';
 
 export interface GraphicProps extends EchartsProps<Pick<Required<EChartsOption>, 'graphic'>> {}
 
-const Graphic: FC<GraphicProps> = (props) => {
-	
-	const use = useRef(applyExtensions([]));
-
+const Graphic: FC<GraphicProps & { uuid: number }> = ({
+	options,
+	onFinish,
+	style,
+	className,
+	theme,
+	notMerge,
+	lazyUpdate,
+	showLoading,
+	debounceDelay,
+}) => {
 	return (
-		<Adapter
-			use={use}
-			{...props}
+		<Core
+			options={options}
+			style={style}
+			className={className}
+			theme={theme}
+			notMerge={notMerge}
+			lazyUpdate={lazyUpdate}
+			showLoading={showLoading}
+			extensions={[GraphicComponent]}
+			debounceDelay={debounceDelay}
+			onFinish={onFinish}
+			events={[]}
+			finished={true}
 		/>
 	);
 };
