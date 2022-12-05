@@ -5,5 +5,6 @@ export * from './charts/gauge';
 export * from './charts/heatmap';
 export * from './charts/pie';
 export * from './charts/sankey';
+export * from './charts/funnel';
 export * from './adapter';
 export * from './core';

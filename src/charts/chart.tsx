@@ -3,6 +3,7 @@ import { ChartTypes } from '../constant';
 import type { FC } from 'react';
 import type { ChartType } from '../types/base';
 import type { BarProps } from './bar';
+import type { FunnelProps } from './funnel';
 import type { GaugeProps } from './gauge';
 import type { HeatMapProps } from './heatmap';
 import type { PieProps } from './pie';
@@ -22,6 +23,9 @@ export type ChartComponentProps =
 	| ({
 			type: 'pie';
 	  } & PieProps)
+	| ({
+			type: 'funnel';
+	  } & FunnelProps)
 	| ({
 			type: 'sankey';
 	  } & SankeyProps)

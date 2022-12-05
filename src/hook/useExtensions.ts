@@ -1,6 +1,6 @@
 import { useRef, useState, useCallback, useEffect } from 'react';
-import applyExtensions from '../utils/extensions';
 import type { EchartsProps, AdapterEChartsOption } from '../types/base';
+import applyExtensions from '../utils/extensions';
 import type{ Extensions } from '../utils/extensions';
 
 const extraExts = [
