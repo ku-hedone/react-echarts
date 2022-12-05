@@ -20,12 +20,21 @@ English | [简体中文](./README-zh_CN.md)
 - 🎨 Auto decide how to import required extensions then do more optimization for bundle size.
 - ⚙️  support JSX event style.
 
+## 📦 Install
+
+```bash
+npm install @hedone/react-echart
+```
+
+```bash
+yarn add @hedone/react-echart
+```
 
 ## 🔨 Usage
 
 
 ```jsx
-import { Bar } from 'echart-for-rc';
+import { Bar } from '@hedone/react-echart';
 
 const App = () => (
   <>
@@ -65,8 +74,8 @@ const App = () => (
 or
 
 ```tsx
-import { Bar } from 'echart-for-rc';
-import type { BarOptions } from 'echart-for-rc';
+import { Bar } from '@hedone/react-echart';
+import type { BarOptions } from '@hedone/react-echart';
 
 const App = () => {
 

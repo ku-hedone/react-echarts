@@ -1,4 +1,4 @@
-<h1 align="center">echart-for-rc</h1>
+<h1 align="center">@elune/react-echart</h1>
 
 <div align="center">
 
@@ -20,12 +20,20 @@
 - 🎨 会根据 __Options__ 中的 __attributes__ 自动决定 当前需要引入的 __extensions__，尽可能的优化 bundle size.
 - ⚙️ 提供了react style 的 event 绑定方式
 
+## 📦 Install
 
+```bash
+npm install @hedone/react-echart
+```
+
+```bash
+yarn add @hedone/react-echart
+```
 
 ## 🔨 示例
 
 ```jsx
-import { Bar } from 'echart-for-rc';
+import { Bar } from '@hedone/react-echart';
 
 const App = () => (
   <>
@@ -65,8 +73,7 @@ const App = () => (
 or
 
 ```tsx
-import { Bar } from 'echart-for-rc';
-import type { BarOptions } from 'echart-for-rc';
+import { Bar, type BarOptions } from '@hedone/react-echart';
 
 const App = () => {
 
@@ -117,6 +124,7 @@ const App = () => {
 ```bash
 $ git clone git@github.com:jay0815/react-echart.git
 $ cd react-echart
-$ pnpm install
+$ yarn install
+$ yarn add echart react@^17.x.x react-dom@^18.x.x @types/react@^17.x.x @types/react-dom@17.x.x -P
 ```
 

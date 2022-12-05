@@ -1,11 +1,11 @@
 {
-	"name": "echart-for-rc",
+	"name": "@hedone/react-echart",
 	"version": "0.0.1",
 	"repository": "git@github.com:jay0815/react-echart.git",
 	"bugs": {
 		"url": "https://github.com/jay0815/react-echart/issues"
 	},
-	"author": "jackqiangc@gmail.com",
+	"author": "jackqian",
 	"homepage": "https://github.com/jay0815/react-echart#readme",
 	"license": "MIT",
 	"private": false,
@@ -31,15 +31,15 @@
 		"check": "tsc --noEmit"
 	},
 	"peerDependencies": {
-		"@types/react": ">=16.9.0",
-		"@types/react-dom": ">=16.9.0",
+		"@types/react": ">=17.0.2",
+		"@types/react-dom": ">=17.0.2",
 		"echarts": "^5.3.3",
-		"react": ">=16.9.0",
-		"react-dom": ">=16.9.0"
+		"react": ">=17.0.2",
+		"react-dom": ">=17.0.2"
 	},
 	"devDependencies": {
-		"@types/react": "^18.0.15",
-		"@types/react-dom": "^18.0.6",
+		"@types/react": ">=17.0.2",
+		"@types/react-dom": ">=17.0.2",
 		"@typescript-eslint/eslint-plugin": "^5.13.0",
 		"@typescript-eslint/parser": "^5.13.0",
 		"echarts": "^5.3.3",
@@ -52,8 +52,8 @@
 		"eslint-plugin-react": "^7.29.3",
 		"eslint-plugin-react-hooks": "^4.3.0",
 		"prettier": "^2.4.0",
-		"react": "^18.2.0",
-		"react-dom": "^18.2.0",
+		"react": ">=17.0.2",
+		"react-dom": ">=17.0.2",
 		"rimraf": "^3.0.2",
 		"tslib": "^2.4.0",
 		"typescript": "^4.6.3"
