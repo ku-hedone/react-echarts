@@ -18,6 +18,14 @@
 		"typings",
 		"src"
 	],
+	"keywords": [
+		"react",
+		"hook",
+		"echart",
+		"react-echart",
+		"chart",
+		"component"
+	],
 	"scripts": {
 		"cjs": "tsc -p cjs.tsconfig.json",
 		"esm": "tsc -p esm.tsconfig.json",
