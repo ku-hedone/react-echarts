@@ -1,7 +1,7 @@
 import { useRef, useState, useCallback, useEffect } from 'react';
 import type { EchartsProps, AdapterEChartsOption } from '../types/base';
 import applyExtensions from '../utils/extensions';
-import type{ Extensions } from '../utils/extensions';
+import type { Extensions } from '../utils/extensions';
 
 const extraExts = [
 	'title',
@@ -21,13 +21,8 @@ const useExtensions = (
 	const extSnapShoot = useRef<Set<string>>(new Set());
 	const changed = useRef(false);
 	const immutableApplyExtensions = useRef(applyExtensions(use));
-	const [state, setState] = useState<{
-		finished: boolean;
-		extensions: Extensions;
-	}>({
-		finished: false,
-		extensions: [],
-	});
+	const [extensions, setExtensions] = useState<Extensions>([]);
+	const [finished, setFinished] = useState(false);
 	/**
 	 * use extensions by options' attribute
 	 */
@@ -44,20 +39,16 @@ const useExtensions = (
 			}
 		}
 		if (changed.current) {
-			setState((p) => ({
-				...p,
-				finished: false,
-			}));
+			setFinished(false);
 			const record: Record<string, true> = {};
 			extraExtsList.forEach((v) => {
 				record[v] = true;
 			});
 			const extensions = await immutableApplyExtensions.current(record);
 			// 无论是否存在 额外 的 extensions, 都要标记 extensions 加载完成
-			setState({
-				extensions,
-				finished: true,
-			});
+			setFinished(true);
+			setExtensions(extensions);
+			changed.current = false;
 		}
 	}, [options]);
 
@@ -65,7 +56,13 @@ const useExtensions = (
 		recordExts();
 	}, [recordExts]);
 
-	return state;
+	return {
+		extensions,
+		finished,
+	} as {
+		extensions: Extensions;
+		finished: boolean;
+	};
 };
 
 export default useExtensions;
