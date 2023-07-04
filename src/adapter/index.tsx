@@ -1,5 +1,5 @@
-import { memo, useMemo } from 'react';
-import Core from '../core';
+import { forwardRef, useMemo } from 'react';
+import Core, { CoreRef } from '../core';
 import { startWith } from '../utils/event';
 import useExtensions from '../hook/useExtensions';
 import type { AdapterEChartsOption, EchartsProps } from '../types/base';
@@ -10,20 +10,27 @@ export interface AdapterProps extends EchartsProps<AdapterEChartsOption> {
 	use: Extensions;
 }
 
-export const Adapter = 
-	memo(({
-		options,
-		use,
-		onFinish,
-		style,
-		className,
-		theme,
-		notMerge,
-		lazyUpdate,
-		showLoading,
-		debounceDelay,
-		...other
-	}: AdapterProps) => {
+export interface AdapterRef extends CoreRef {}
+
+const EMPTY_EVENTS: RecordToArray = [];
+
+export const Adapter = forwardRef<AdapterRef, AdapterProps>(
+	(
+		{
+			options,
+			use,
+			onFinish,
+			style,
+			className,
+			theme,
+			notMerge,
+			lazyUpdate,
+			showLoading,
+			debounceDelay,
+			...other
+		},
+		ref,
+	) => {
 		/**
 		 * use extensions by options' attribute
 		 */
@@ -56,11 +63,12 @@ export const Adapter =
 				});
 				return eventBus;
 			}
-			return [];
+			return EMPTY_EVENTS;
 		}, [other]);
 
 		return (
 			<Core
+				ref={ref}
 				options={options}
 				style={style}
 				className={className}
@@ -75,7 +83,7 @@ export const Adapter =
 				finished={finished}
 			/>
 		);
-})
-;
+	},
+);
 
 export default Adapter;

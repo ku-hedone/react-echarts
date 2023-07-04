@@ -1,9 +1,16 @@
-import { useLayoutEffect, useRef, useCallback, memo, useState, useEffect } from 'react';
+import {
+	useLayoutEffect,
+	useRef,
+	useCallback,
+	useState,
+	useEffect,
+	useImperativeHandle,
+	forwardRef,
+} from 'react';
 import { dispose, getInstanceByDom, init, use } from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
 import { connect } from '../utils/event';
 import { useResize } from '../hook/useResize';
-import type { FC } from 'react';
 import type { ECharts } from 'echarts/core';
 import type { EChartsOption } from 'echarts/types/dist/shared';
 import type { EchartsProps } from '../types/base';
@@ -15,6 +22,10 @@ interface ReactEchartProps extends Omit<EchartsProps<EChartsOption>, EchartsEven
 	extensions: Extensions;
 	events: RecordToArray;
 	finished: boolean;
+}
+
+export interface CoreRef {
+	instance: () => ECharts | undefined;
 }
 
 use([CanvasRenderer]);
@@ -30,25 +41,28 @@ const removeBind = connect('off');
 const defaultHeight = 'fit-content';
 const defaultMinHeight = '300px';
 
-export const Core: FC<ReactEchartProps> = memo(
-	({
-		theme,
-		options,
-		notMerge = false,
-		lazyUpdate = false,
-		debounceDelay = 0,
-		showLoading,
-		className,
-		style,
-		extensions,
-		onFinish,
-		events,
-		finished,
-	}) => {
+export const Core = forwardRef<CoreRef, ReactEchartProps>(
+	(
+		{
+			theme,
+			options,
+			notMerge = false,
+			lazyUpdate = false,
+			debounceDelay = 0,
+			showLoading,
+			className,
+			style,
+			extensions,
+			onFinish,
+			events,
+			finished,
+		},
+		ref,
+	) => {
 		// TODO: use Sequence Component to change into sync coding style
 		// so need a flag to control render
 		const [isUpdatePreparation, setUpdatePreparation] = useState(false);
-		const ref = useRef<HTMLDivElement>(null);
+		const dom = useRef<HTMLDivElement>(null);
 		/**
 		 * when first init echart
 		 *
@@ -68,11 +82,63 @@ export const Core: FC<ReactEchartProps> = memo(
 		/**
 		 * dispose echarts instance
 		 */
-		const disposeInstance = () => {
-			if (ref.current) {
-				dispose(ref.current);
+		const disposeInstance = useCallback(() => {
+			if (dom.current) {
+				dispose(dom.current);
 			}
+		}, []);
+		/**
+		 * when inline style or className changed, resize
+		 */
+		const resize = () => {
+			const echartInstance = instance.current;
+			if (echartInstance && !isFirstResize.current) {
+				try {
+					echartInstance.resize({
+						width: 'auto',
+						height: 'auto',
+					});
+				} catch (e) {
+					console.warn(e);
+				}
+			}
+			isFirstResize.current = false;
 		};
+		/**
+		 * use Resize Observer as chart size trigger
+		 */
+		useResize({
+			ref: dom,
+			fun: resize,
+			debounceDelay,
+		});
+		/**
+		 * update the local echarts
+		 */
+		const updateEChartsOption = useCallback(() => {
+			const echartInstance = instance.current;
+			if (echartInstance && options) {
+				echartInstance.setOption(options, notMerge, lazyUpdate);
+			}
+		}, [options, lazyUpdate, notMerge]);
+		/**
+		 * update the local echarts loading status
+		 */
+		const updateEchartLoading = useCallback(() => {
+			const echartInstance = instance.current;
+			if (echartInstance) {
+				if (showLoading) {
+					if (typeof showLoading === 'boolean') {
+						echartInstance.showLoading();
+					} else {
+						const { type, opts } = showLoading;
+						echartInstance.showLoading(type, opts);
+					}
+				} else {
+					echartInstance.hideLoading();
+				}
+			}
+		}, [showLoading]);
 		/**
 		 * init echart instance
 		 *
@@ -80,9 +146,23 @@ export const Core: FC<ReactEchartProps> = memo(
 		 */
 		// TODO optimize into compare ref
 		const initEchart = useCallback(() => {
-			if (ref.current && finished) {
+			if (dom.current && finished) {
+				// if extensions is not empty, use extensions
+				// otherwise, do not use extensions
+				let hasAllExtensions = false;
 				// finished means that all extensions has downloaded
-				use(extensions);
+				if (extensions) {
+					if (Array.isArray(extensions)) {
+						if (extensions.length > 0) {
+							use(extensions);
+							hasAllExtensions = true;
+						}
+					} else {
+						use(extensions);
+						hasAllExtensions = true;
+					}
+				}
+
 				/**
 				 * now, initEchart will also be activated by other props
 				 * such as
@@ -106,63 +186,19 @@ export const Core: FC<ReactEchartProps> = memo(
 				 *
 				 * so need prevent ref clear into empty
 				 */
-				if (ref.current) {
+				if (dom.current && hasAllExtensions) {
 					const opts = {
-						width: ref.current.clientWidth,
-						height: ref.current.clientHeight,
+						width: dom.current.clientWidth,
+						height: dom.current.clientHeight,
 						renderer: 'canvas',
 					} as const;
-					init(ref.current, theme, opts);
+					init(dom.current, theme, opts);
 					// update echart instance
-					instance.current = getInstanceByDom(ref.current);
+					instance.current = getInstanceByDom(dom.current);
 					setUpdatePreparation(true);
 				}
 			}
-		}, [extensions, theme, finished]);
-		/**
-		 * when inline style or className changed, resize
-		 */
-		const resize = () => {
-			const echartInstance = instance.current;
-			if (echartInstance && !isFirstResize.current) {
-				try {
-					echartInstance.resize({
-						width: 'auto',
-						height: 'auto',
-					});
-				} catch (e) {
-					console.warn(e);
-				}
-			}
-			isFirstResize.current = false;
-		};
-		/**
-		 * use Resize Observer as chart size trigger
-		 */
-		useResize({
-			ref,
-			fun: resize,
-			debounceDelay,
-		});
-		/**
-		 * update the local echarts
-		 */
-		const updateEChartsOption = useCallback(() => {
-			const echartInstance = instance.current;
-			if (echartInstance && options) {
-				echartInstance.setOption(options, notMerge, lazyUpdate);
-				if (showLoading) {
-					if (typeof showLoading === 'boolean') {
-						echartInstance.showLoading();
-					} else {
-						const { type, opts } = showLoading;
-						echartInstance.showLoading(type, opts);
-					}
-				} else {
-					echartInstance.hideLoading();
-				}
-			}
-		}, [lazyUpdate, notMerge, options, showLoading]);
+		}, [finished, extensions, disposeInstance, theme]);
 		/**
 		 * bind events to local echarts
 		 */
@@ -186,7 +222,13 @@ export const Core: FC<ReactEchartProps> = memo(
 				onFinish(instance.current);
 			}
 			setUpdatePreparation(false);
-		}, [bindEvents, updateEChartsOption, onFinish]);
+		}, [updateEChartsOption, bindEvents, onFinish]);
+		/**
+		 * when window resize
+		 */
+		useEffect(() => {
+			updateEchartLoading();
+		}, [updateEchartLoading]);
 
 		useLayoutEffect(() => {
 			initEchart();
@@ -206,14 +248,20 @@ export const Core: FC<ReactEchartProps> = memo(
 		 */
 		useEffect(() => {
 			return () => {
-				console.log('remove Resize & dispose');
+				if (instance.current) {
+					console.log('Unmounted Core: remove Resize Event & dispose', instance.current.getOption());
+				}
 				disposeInstance();
 			};
-		}, []);
+		}, [disposeInstance]);
+
+		useImperativeHandle(ref, () => ({
+			instance: () => instance.current,
+		}));
 
 		return (
 			<div
-				ref={ref}
+				ref={dom}
 				style={style || { height: defaultHeight, minHeight: defaultMinHeight }}
 				className={className || ''}
 			/>

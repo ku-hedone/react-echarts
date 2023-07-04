@@ -1,10 +1,15 @@
+import { useMemo } from 'react';
 import GraphicComponent from '../components/GraphicComponent';
 import Core from '../core';
 import type { EchartsProps } from '../types/base';
 import type { FC } from 'react';
 import type { EChartsOption } from 'echarts/types/dist/shared';
+import type { RecordToArray } from '../types/event';
 
-export interface GraphicProps extends EchartsProps<Pick<Required<EChartsOption>, 'graphic'>> {}
+export interface GraphicProps
+	extends EchartsProps<Pick<Required<EChartsOption>, 'graphic'>> {}
+
+const events: RecordToArray = [];
 
 const Graphic: FC<GraphicProps & { uuid: number }> = ({
 	options,
@@ -17,6 +22,7 @@ const Graphic: FC<GraphicProps & { uuid: number }> = ({
 	showLoading,
 	debounceDelay,
 }) => {
+	const GraphicExtensions = useMemo(() => [GraphicComponent], []);
 	return (
 		<Core
 			options={options}
@@ -26,10 +32,10 @@ const Graphic: FC<GraphicProps & { uuid: number }> = ({
 			notMerge={notMerge}
 			lazyUpdate={lazyUpdate}
 			showLoading={showLoading}
-			extensions={[GraphicComponent]}
+			extensions={GraphicExtensions}
 			debounceDelay={debounceDelay}
 			onFinish={onFinish}
-			events={[]}
+			events={events}
 			finished={true}
 		/>
 	);
