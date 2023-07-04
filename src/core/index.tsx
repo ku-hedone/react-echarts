@@ -249,7 +249,10 @@ export const Core = forwardRef<CoreRef, ReactEchartProps>(
 		useEffect(() => {
 			return () => {
 				if (instance.current) {
-					console.log('Unmounted Core: remove Resize Event & dispose', instance.current.getOption());
+					console.log(
+						'Unmounted Core: remove Resize Event & dispose',
+						instance.current.getOption(),
+					);
 				}
 				disposeInstance();
 			};
