@@ -118,9 +118,22 @@ export const Core = forwardRef<CoreRef, ReactEchartProps>(
 		const updateEChartsOption = useCallback(() => {
 			const echartInstance = instance.current;
 			if (echartInstance && options) {
-				echartInstance.setOption(options, notMerge, lazyUpdate);
+				const mergerOptions: string[] = [];
+				if ('legend' in options) {
+					mergerOptions.push('legend');
+				}
+				if ('tooltip' in options) {
+					mergerOptions.push('tooltip');
+				}
+				if ('series' in options) {
+					mergerOptions.push('series');
+				}
+				echartInstance.setOption(options, {
+					replaceMerge: mergerOptions,
+					lazyUpdate,
+				});
 			}
-		}, [options, lazyUpdate, notMerge]);
+		}, [options, lazyUpdate]);
 		/**
 		 * update the local echarts loading status
 		 */
