@@ -8,3 +8,4 @@ export * from './charts/sankey';
 export * from './charts/funnel';
 export * from './adapter';
 export * from './core';
+export { saveAsImage } from './utils/image';
