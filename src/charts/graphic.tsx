@@ -11,7 +11,7 @@ export interface GraphicProps
 
 const events: RecordToArray = [];
 
-const Graphic: FC<GraphicProps & { uuid: number }> = ({
+export const Graphic: FC<GraphicProps & { uuid: number }> = ({
 	options,
 	onFinish,
 	style,
@@ -40,5 +40,3 @@ const Graphic: FC<GraphicProps & { uuid: number }> = ({
 		/>
 	);
 };
-
-export { Graphic };

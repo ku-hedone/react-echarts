@@ -2,18 +2,18 @@ import type { ECharts } from 'echarts/core';
 import type { RecordToArray } from '../types/event';
 
 /**
- * bind or remove event 
- * @param type 
- * @returns 
+ * bind or remove event
+ * @param type
+ * @returns
  */
 export const connect =
 	(type: 'on' | 'off' = 'on') =>
 	(instance: ECharts, event: RecordToArray) => {
 		/**
 		 * fn = instance[type]  will lose this
-		 * 
+		 *
 		 * so need bind this
-		 * 
+		 *
 		 */
 		const fn = instance[type].bind(instance);
 		event.forEach((i) => {
@@ -21,11 +21,11 @@ export const connect =
 		});
 	};
 /**
- * 
+ *
  * @param target target str
  * @param search need be search str
  * @param start match started index
- * @returns 
+ * @returns
  */
 export const startWith = (target: string, search: string, start = 0) => {
 	// if String has startsWith
@@ -43,4 +43,4 @@ export const startWith = (target: string, search: string, start = 0) => {
 		}
 	}
 	return true;
-}
+};

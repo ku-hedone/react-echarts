@@ -9,7 +9,7 @@ import type { CoreRef } from '../core';
 type EChartsOption = ComposeOption<SankeySeriesOption | ExtensionsComponent>;
 export interface SankeyProps extends EchartsProps<EChartsOption> {}
 
-const Sankey = forwardRef<CoreRef, SankeyProps>((props, ref) => {
+export const Sankey = forwardRef<CoreRef, SankeyProps>((props, ref) => {
 	const SankeyExtensions = useMemo(() => [SankeyChart], []);
 	return (
 		<Adapter
@@ -19,5 +19,3 @@ const Sankey = forwardRef<CoreRef, SankeyProps>((props, ref) => {
 		/>
 	);
 });
-
-export { Sankey };

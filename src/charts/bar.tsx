@@ -11,7 +11,7 @@ type EChartsOption = ComposeOption<BarSeriesOption | ExtensionsComponent>;
 
 export interface BarProps extends EchartsProps<EChartsOption> {}
 
-const Bar = forwardRef<CoreRef, BarProps>((props, ref) => {
+export const Bar = forwardRef<CoreRef, BarProps>((props, ref) => {
 	const BarExtensions = useMemo(() => [GridComponent, BarChart], []);
 	return (
 		<Adapter
@@ -21,5 +21,3 @@ const Bar = forwardRef<CoreRef, BarProps>((props, ref) => {
 		/>
 	);
 });
-
-export { Bar };

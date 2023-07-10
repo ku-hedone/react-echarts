@@ -1,21 +1,35 @@
-import type { CallbackDataParams } from "echarts/types/dist/shared";
+import type { CallbackDataParams } from 'echarts/types/dist/shared';
 
 /**
  * react-echart support base Events
  */
-type EchartsMouseEvent = 'Click'| 'DblClick' | 'MouseDown'| 'MouseMove' | 'MouseUp' | 'MouseOver' | 'MouseOut' | 'GlobalOut' | 'ContextMenu';
+type EchartsMouseEvent =
+	| 'Click'
+	| 'DblClick'
+	| 'MouseDown'
+	| 'MouseMove'
+	| 'MouseUp'
+	| 'MouseOver'
+	| 'MouseOut'
+	| 'GlobalOut'
+	| 'ContextMenu';
 /**
  * react2Echarts Events as React Events Style
  */
-export type EchartsEventName= `on${EchartsMouseEvent}`;
+export type EchartsEventName = `on${EchartsMouseEvent}`;
 /**
  * echarts supports Events
  */
-export type OmitEventOnSymbol<T extends string> = T extends `on${infer A}` ? Lowercase<A> : never;
+export type OmitEventOnSymbol<T extends string> = T extends `on${infer A}`
+	? Lowercase<A>
+	: never;
 /**
  * react2Echarts' event props
  */
-export type EchartsEventSource = Record<EchartsEventName, (params: CallbackDataParams) => void>;
+export type EchartsEventSource = Record<
+	EchartsEventName,
+	(params: CallbackDataParams) => void
+>;
 /**
  * transform chart events props to array
  */

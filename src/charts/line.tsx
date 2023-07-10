@@ -11,7 +11,7 @@ type EChartsOption = ComposeOption<LineSeriesOption | ExtensionsComponent>;
 
 export interface LineProps extends EchartsProps<EChartsOption> {}
 
-const Line = forwardRef<CoreRef, LineProps>((props, ref) => {
+export const Line = forwardRef<CoreRef, LineProps>((props, ref) => {
 	const LineExtensions = useMemo(() => [GridComponent, LineChart], []);
 	return (
 		<Adapter
@@ -21,4 +21,3 @@ const Line = forwardRef<CoreRef, LineProps>((props, ref) => {
 		/>
 	);
 });
-export { Line };

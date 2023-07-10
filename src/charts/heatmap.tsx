@@ -10,7 +10,7 @@ type EChartsOption = ComposeOption<HeatmapSeriesOption | ExtensionsComponent>;
 
 export interface HeatMapProps extends EchartsProps<EChartsOption> {}
 
-const HeatMap = forwardRef<CoreRef, HeatMapProps>((props, ref) => {
+export const HeatMap = forwardRef<CoreRef, HeatMapProps>((props, ref) => {
 	const HeatMapExtensions = useMemo(() => [HeatmapChart], []);
 	return (
 		<Adapter
@@ -20,5 +20,3 @@ const HeatMap = forwardRef<CoreRef, HeatMapProps>((props, ref) => {
 		/>
 	);
 });
-
-export { HeatMap };

@@ -10,7 +10,7 @@ type EChartsOption = ComposeOption<PieSeriesOption | ExtensionsComponent>;
 
 export interface PieProps extends EchartsProps<EChartsOption> {}
 
-const Pie = forwardRef<CoreRef, PieProps>((props, ref) => {
+export const Pie = forwardRef<CoreRef, PieProps>((props, ref) => {
 	const PieExtensions = useMemo(() => [PieChart], []);
 	return (
 		<Adapter
@@ -20,5 +20,3 @@ const Pie = forwardRef<CoreRef, PieProps>((props, ref) => {
 		/>
 	);
 });
-
-export { Pie };

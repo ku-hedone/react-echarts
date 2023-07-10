@@ -41,10 +41,7 @@ export const useDebouncedCallback = <T extends (...args: any[]) => ReturnType<T>
 	 *
 	 * trailing use `true` by default
 	 */
-	const { 
-        leading = false, 
-        trailing = true 
-    } = optionsRef.current;
+	const { leading = false, trailing = true } = optionsRef.current;
 	const hasMaxWait = 'maxWait' in optionsRef.current;
 	const maxWait = hasMaxWait
 		? Math.max(optionsRef.current.maxWait || 0, wait || 0)
@@ -58,7 +55,7 @@ export const useDebouncedCallback = <T extends (...args: any[]) => ReturnType<T>
 	}, []);
 
 	const debounced = useMemo(() => {
-        const waitTime = wait || 0;
+		const waitTime = wait || 0;
 
 		const invokeFunc = (time: number) => {
 			const args = lastArgs.current || [];
@@ -161,4 +158,4 @@ export const useDebouncedCallback = <T extends (...args: any[]) => ReturnType<T>
 	}, [leading, hasMaxWait, wait, maxWait, trailing, useRAF]);
 
 	return debounced;
-}
+};

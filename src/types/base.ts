@@ -10,10 +10,7 @@ import type {
 	GraphicComponentOption,
 } from 'echarts/components';
 import type { ECharts } from 'echarts/core';
-import type {
-	EChartsOption,
-	ComposeOption,
-} from 'echarts/types/dist/shared';
+import type { EChartsOption, ComposeOption } from 'echarts/types/dist/shared';
 import type { CSSProperties } from 'react';
 import type { EchartsEventSource } from './event';
 

@@ -65,7 +65,6 @@ export const Adapter = forwardRef<AdapterRef, AdapterProps>(
 			}
 			return EMPTY_EVENTS;
 		}, [other]);
-
 		return (
 			<Core
 				ref={ref}
