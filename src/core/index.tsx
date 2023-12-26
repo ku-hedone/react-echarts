@@ -46,7 +46,7 @@ export const Core = forwardRef<CoreRef, ReactEchartProps>(
 		{
 			theme,
 			options,
-			notMerge = false,
+			notMerge = true,
 			lazyUpdate = false,
 			debounceDelay = 0,
 			showLoading,
@@ -61,6 +61,7 @@ export const Core = forwardRef<CoreRef, ReactEchartProps>(
 	) => {
 		// TODO: use Sequence Component to change into sync coding style
 		// so need a flag to control render
+		// when uninitialized, can not be render
 		const [isUpdatePreparation, setUpdatePreparation] = useState(false);
 		const dom = useRef<HTMLDivElement>(null);
 		/**
@@ -159,22 +160,12 @@ export const Core = forwardRef<CoreRef, ReactEchartProps>(
 		 */
 		// TODO optimize into compare ref
 		const initEchart = useCallback(() => {
-			if (dom.current && finished) {
-				// if extensions is not empty, use extensions
-				// otherwise, do not use extensions
-				let hasAllExtensions = false;
+			// if extensions is not empty, use extensions
+			// otherwise, do not use extensions
+			if (dom.current && finished && Array.isArray(extensions) && extensions.length > 0) {
+				setUpdatePreparation(false);
 				// finished means that all extensions has downloaded
-				if (extensions) {
-					if (Array.isArray(extensions)) {
-						if (extensions.length > 0) {
-							use(extensions);
-							hasAllExtensions = true;
-						}
-					} else {
-						use(extensions);
-						hasAllExtensions = true;
-					}
-				}
+				use(extensions);
 
 				/**
 				 * now, initEchart will also be activated by other props
@@ -199,7 +190,7 @@ export const Core = forwardRef<CoreRef, ReactEchartProps>(
 				 *
 				 * so need prevent ref clear into empty
 				 */
-				if (dom.current && hasAllExtensions) {
+				if (dom.current) {
 					const opts = {
 						width: dom.current.clientWidth,
 						height: dom.current.clientHeight,
@@ -234,7 +225,6 @@ export const Core = forwardRef<CoreRef, ReactEchartProps>(
 			if (instance.current && typeof onFinish === 'function') {
 				onFinish(instance.current);
 			}
-			setUpdatePreparation(false);
 		}, [updateEChartsOption, bindEvents, onFinish]);
 		/**
 		 * when window resize
