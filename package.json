@@ -15,8 +15,7 @@
 	"files": [
 		"cjs",
 		"esm",
-		"typings",
-		"src"
+		"typings"
 	],
 	"keywords": [
 		"react",
