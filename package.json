@@ -1,6 +1,6 @@
 {
 	"name": "@hedone/react-echart",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"repository": "git@github.com:jay0815/react-echart.git",
 	"bugs": {
 		"url": "https://github.com/jay0815/react-echart/issues"
