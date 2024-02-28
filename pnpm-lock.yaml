@@ -18,8 +18,8 @@ devDependencies:
     specifier: ^5.13.0
     version: 5.37.0(eslint@8.23.1)(typescript@4.8.3)
   echarts:
-    specifier: ^5.4.2
-    version: 5.4.2
+    specifier: ^5.5.0
+    version: 5.5.0
   eslint:
     specifier: ^8.10.0
     version: 8.23.1
@@ -498,11 +498,11 @@ packages:
       esutils: 2.0.3
     dev: true
 
-  /echarts@5.4.2:
-    resolution: {integrity: sha512-2W3vw3oI2tWJdyAz+b8DuWS0nfXtSDqlDmqgin/lfzbkB01cuMEN66KWBlmur3YMp5nEDEEt5s23pllnAzB4EA==}
+  /echarts@5.5.0:
+    resolution: {integrity: sha512-rNYnNCzqDAPCr4m/fqyUFv7fD9qIsd50S6GDFgO1DxZhncCsNsG7IfUlAlvZe5oSEQxtsjnHiUuppzccry93Xw==}
     dependencies:
       tslib: 2.3.0
-      zrender: 5.4.3
+      zrender: 5.5.0
     dev: true
 
   /es-abstract@1.20.2:
@@ -1726,8 +1726,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /zrender@5.4.3:
-    resolution: {integrity: sha512-DRUM4ZLnoaT0PBVvGBDO9oWIDBKFdAVieNWxWwK0niYzJCMwGchRk21/hsE+RKkIveH3XHCyvXcJDkgLVvfizQ==}
+  /zrender@5.5.0:
+    resolution: {integrity: sha512-O3MilSi/9mwoovx77m6ROZM7sXShR/O/JIanvzTwjN3FORfLSr81PsUGd7jlaYOeds9d8tw82oP44+3YucVo+w==}
     dependencies:
       tslib: 2.3.0
     dev: true
