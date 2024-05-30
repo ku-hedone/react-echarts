@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import GraphicComponent from '../components/GraphicComponent';
 import Core from '../core';
-import type { EchartsProps } from '../types/base';
 import type { FC } from 'react';
 import type { EChartsOption } from 'echarts';
+import type { EchartsProps } from '../types/base';
 import type { RecordToArray } from '../types/event';
 
 export interface GraphicProps
@@ -11,7 +11,7 @@ export interface GraphicProps
 
 const events: RecordToArray = [];
 
-export const Graphic: FC<GraphicProps & { uuid: number }> = ({
+const Graphic: FC<GraphicProps & { uuid: number }> = ({
 	options,
 	onFinish,
 	style,
@@ -40,3 +40,5 @@ export const Graphic: FC<GraphicProps & { uuid: number }> = ({
 		/>
 	);
 };
+
+export { Graphic };

@@ -2,10 +2,10 @@ import { forwardRef, useMemo } from 'react';
 import Core, { CoreRef } from '../core';
 import { startWith } from '../utils/event';
 import useExtensions from '../hook/useExtensions';
-import type { EChartsOption } from 'echarts';
 import type { AdapterEChartsOption, EchartsProps } from '../types/base';
 import type { OmitEventOnSymbol, RecordToArray } from '../types/event';
 import type { Extensions } from '../utils/extensions';
+import type { EChartsOption } from 'echarts';
 
 export interface AdapterProps extends EchartsProps<AdapterEChartsOption> {
 	use: Extensions;
@@ -67,6 +67,7 @@ export const Adapter = forwardRef<AdapterRef, AdapterProps>(
 			}
 			return EMPTY_EVENTS;
 		}, [other]);
+
 		return (
 			<Core
 				ref={ref}

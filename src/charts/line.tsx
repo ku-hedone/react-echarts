@@ -3,15 +3,17 @@ import { LineChart } from 'echarts/charts';
 import Adapter from '../adapter';
 import { forwardRef, useMemo } from 'react';
 import type { LineSeriesOption } from 'echarts/charts';
-import type { ComposeOption } from 'echarts/core';
-import type { EchartsProps, ExtensionsComponent } from '../types/base';
 import type { CoreRef } from '../core';
+import type {
+	Axis,
+	EchartsProps,
+	ExtensionsComponent,
+	GeneratorOptions,
+} from '../types/base';
+export interface LineProps
+	extends EchartsProps<GeneratorOptions<LineSeriesOption, ExtensionsComponent> & Axis> {}
 
-type EChartsOption = ComposeOption<LineSeriesOption | ExtensionsComponent>;
-
-export interface LineProps extends EchartsProps<EChartsOption> {}
-
-export const Line = forwardRef<CoreRef, LineProps>((props, ref) => {
+const Line = forwardRef<CoreRef, LineProps>((props, ref) => {
 	const LineExtensions = useMemo(() => [GridComponent, LineChart], []);
 	return (
 		<Adapter
@@ -21,3 +23,4 @@ export const Line = forwardRef<CoreRef, LineProps>((props, ref) => {
 		/>
 	);
 });
+export { Line };

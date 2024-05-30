@@ -8,10 +8,21 @@ import type {
 	TooltipComponentOption,
 	VisualMapComponentOption,
 	GraphicComponentOption,
+	TimelineComponentOption,
 } from 'echarts/components';
-import type { ECharts, ComposeOption } from 'echarts';
+import type {
+	ECharts,
+	EChartsOption,
+	XAXisComponentOption,
+	YAXisComponentOption,
+} from 'echarts';
 import type { CSSProperties } from 'react';
 import type { EchartsEventSource } from './event';
+
+export interface Axis {
+	xAxis?: XAXisComponentOption | XAXisComponentOption[];
+	yAxis?: YAXisComponentOption | YAXisComponentOption[];
+}
 
 /**
  * echarts extensions' type
@@ -136,13 +147,10 @@ export type ExtensionsComponent =
 	| TooltipComponentOption
 	| GridComponentOption
 	| LegendComponentOption
-	| GridComponentOption
 	| VisualMapComponentOption
-	| GraphicComponentOption;
+	| GraphicComponentOption
+	| TimelineComponentOption;
 
-/**
- * attributes which need be use extension
- */
 export type ExtensionsKey =
 	| 'dataset'
 	| 'title'
@@ -154,14 +162,64 @@ export type ExtensionsKey =
 	| 'graphic'
 	| 'timeline';
 
-export type ChartType = typeof ChartTypes[number];
-
-export type AdapterEChartsOption = ComposeOption<ExtensionsComponent>;
-
 /**
  * attributes which need be use extension
  */
-export type ExtensionsKeyValue = Partial<Record<
-	ExtensionsKey,
-	true
->>;
+export type ExtensionsKeyValue = Partial<Record<ExtensionsKey, true>>;
+
+export type ChartType = (typeof ChartTypes)[number];
+
+interface ComponentOption {
+	mainType?: string;
+}
+
+type ExtractComponentOption<OptionUnion, ExtractMainType> = OptionUnion extends {
+	mainType?: ExtractMainType;
+}
+	? OptionUnion
+	: never;
+
+type GetMainType<OptionUnion extends ComponentOption> = Exclude<
+	OptionUnion['mainType'],
+	undefined
+>;
+
+type ComposeUnitOption<OptionUnion extends ComponentOption> = {
+	[key in GetMainType<OptionUnion>]?: ExtractComponentOption<OptionUnion, key>;
+};
+
+type AnimationOptionKeys =
+	| 'animation'
+	| 'animationThreshold'
+	| 'animationDuration'
+	| 'animationEasing'
+	| 'animationDelay'
+	| 'animationDurationUpdate'
+	| 'animationEasingUpdate'
+	| 'animationDelayUpdate'
+	| 'stateAnimation';
+
+type AnimationOption = Pick<EChartsOption, AnimationOptionKeys>;
+
+type ColorOptionKeys = 'color' | 'colorLayer';
+
+type ColorOption = Pick<EChartsOption, ColorOptionKeys>;
+
+type BaseOptionKeys =
+	| 'timeline'
+	| 'textStyle'
+	| 'useUTC'
+	| 'backgroundColor'
+	| 'darkMode';
+
+type BaseOption = Pick<EChartsOption, BaseOptionKeys>;
+
+export type AdapterEChartsBaseOption = BaseOption & ColorOption & AnimationOption;
+
+export type GeneratorOptions<T, E extends ComponentOption> = {
+	series: T[];
+} & ComposeUnitOption<E> &
+	AdapterEChartsBaseOption;
+
+export type AdapterEChartsOption = AdapterEChartsBaseOption &
+	ComposeUnitOption<ExtensionsComponent>;

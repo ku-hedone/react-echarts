@@ -1,16 +1,14 @@
 import { PieChart } from 'echarts/charts';
 import Adapter from '../adapter';
 import { forwardRef, useMemo } from 'react';
-import type { ComposeOption } from 'echarts/core';
 import type { PieSeriesOption } from 'echarts/charts';
-import type { EchartsProps, ExtensionsComponent } from '../types/base';
 import type { CoreRef } from '../core';
+import type { EchartsProps, ExtensionsComponent, GeneratorOptions } from '../types/base';
 
-type EChartsOption = ComposeOption<PieSeriesOption | ExtensionsComponent>;
+export interface PieProps
+	extends EchartsProps<GeneratorOptions<PieSeriesOption, ExtensionsComponent>> {}
 
-export interface PieProps extends EchartsProps<EChartsOption> {}
-
-export const Pie = forwardRef<CoreRef, PieProps>((props, ref) => {
+const Pie = forwardRef<CoreRef, PieProps>((props, ref) => {
 	const PieExtensions = useMemo(() => [PieChart], []);
 	return (
 		<Adapter
@@ -20,3 +18,5 @@ export const Pie = forwardRef<CoreRef, PieProps>((props, ref) => {
 		/>
 	);
 });
+
+export { Pie };

@@ -34,35 +34,34 @@ export type ChartComponentProps =
 	  } & GraphicProps);
 
 export const Chart: FC<ChartComponentProps> = ({ type, options, ...other }) => {
-    try {
-        if (typeof type === 'undefined' || !type) {
-            throw new Error(`type must be valid string. eg: ${ChartTypes.toString()}`);
-        }
-        type = type.toLowerCase().trim() as ChartType;
-        if (ChartTypes.indexOf(type) === -1) {
-            throw new Error(`type must in ${ChartTypes.toString()}`);
-        }
-        const Chart = lazy<FC<Omit<ChartComponentProps, 'type'>>>(async () =>
-            import(`../charts/${type}.js`).then((res) => {
-                const ChartName = type.split('');
-                ChartName[0] = ChartName[0].toLocaleUpperCase();
-                return {
-                    ...res,
-                    default: res[ChartName.join('')],
-                };
-            }),
-        );
-        return (
-            <Suspense fallback={null}>
-                <Chart
-                    options={options}
-                    {...other}
-                />
-            </Suspense>
-        );
-    } catch(e) {
-        console.error(e);
-        return null;
-    }
-
+	try {
+		if (typeof type === 'undefined' || !type) {
+			throw new Error(`type must be valid string. eg: ${ChartTypes.toString()}`);
+		}
+		type = type.toLowerCase().trim() as ChartType;
+		if (ChartTypes.indexOf(type) === -1) {
+			throw new Error(`type must in ${ChartTypes.toString()}`);
+		}
+		const Chart = lazy<FC<Omit<ChartComponentProps, 'type'>>>(async () =>
+			import(`../charts/${type}.js`).then((res) => {
+				const ChartName = type.split('');
+				ChartName[0] = ChartName[0].toLocaleUpperCase();
+				return {
+					...res,
+					default: res[ChartName.join('')],
+				};
+			}),
+		);
+		return (
+			<Suspense fallback={null}>
+				<Chart
+					options={options}
+					{...other}
+				/>
+			</Suspense>
+		);
+	} catch (e) {
+		console.error(e);
+		return null;
+	}
 };

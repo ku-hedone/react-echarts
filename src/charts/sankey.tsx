@@ -1,15 +1,13 @@
 import { SankeyChart } from 'echarts/charts';
 import Adapter from '../adapter';
 import { forwardRef, useMemo } from 'react';
-import type { ComposeOption } from 'echarts/core';
 import type { SankeySeriesOption } from 'echarts/charts';
-import type { EchartsProps, ExtensionsComponent } from '../types/base';
 import type { CoreRef } from '../core';
+import type { EchartsProps, ExtensionsComponent, GeneratorOptions } from '../types/base';
+export interface SankeyProps
+	extends EchartsProps<GeneratorOptions<SankeySeriesOption, ExtensionsComponent>> {}
 
-type EChartsOption = ComposeOption<SankeySeriesOption | ExtensionsComponent>;
-export interface SankeyProps extends EchartsProps<EChartsOption> {}
-
-export const Sankey = forwardRef<CoreRef, SankeyProps>((props, ref) => {
+const Sankey = forwardRef<CoreRef, SankeyProps>((props, ref) => {
 	const SankeyExtensions = useMemo(() => [SankeyChart], []);
 	return (
 		<Adapter
@@ -19,3 +17,5 @@ export const Sankey = forwardRef<CoreRef, SankeyProps>((props, ref) => {
 		/>
 	);
 });
+
+export { Sankey };
