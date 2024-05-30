@@ -44,7 +44,7 @@ const removeBind = connect('off');
 const defaultHeight = '300px';
 
 const defaultStyle: CSSProperties = {
-	height: defaultHeight,
+	height: '100%',
 };
 
 export const Core = forwardRef<CoreRef, ReactEchartProps>(
@@ -208,7 +208,7 @@ export const Core = forwardRef<CoreRef, ReactEchartProps>(
 				if (dom.current) {
 					const opts = {
 						width: dom.current.clientWidth,
-						height: dom.current.clientHeight,
+						height: dom.current.clientHeight || defaultHeight,
 						renderer: 'canvas',
 					} as const;
 					init(dom.current, theme, opts);
