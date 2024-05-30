@@ -6,7 +6,7 @@ import {
 	useEffect,
 	useImperativeHandle,
 	forwardRef,
-	memo
+	memo,
 } from 'react';
 import { getInstanceByDom } from 'echarts';
 import { dispose, init, use } from 'echarts/core';
@@ -15,23 +15,24 @@ import { useResize } from '../hook/useResize';
 import { connect } from '../utils/event';
 import { isSameStyle, isSameTheme, isSameEvent } from '../utils/compare';
 import type { CSSProperties } from 'react';
-import type { EChartsOption, EChartsType } from 'echarts';
 import type { EchartsProps } from '../types/base';
 import type { EchartsEventName, RecordToArray } from '../types/event';
 import type { Extensions } from '../utils/extensions';
+import type { EChartsOption, EChartsType } from 'echarts';
 
 interface ReactEchartProps extends Omit<EchartsProps<EChartsOption>, EchartsEventName> {
 	readonly options: EChartsOption;
 	extensions: Extensions;
 	events: RecordToArray;
 	finished: boolean;
+	autoResize?: boolean;
 }
 
 export interface CoreRef {
 	instance: () => EChartsType | undefined;
 }
 
-use([CanvasRenderer]);
+use([CanvasRenderer] as const);
 /**
  * bind events
  */
@@ -41,6 +42,7 @@ const bind = connect();
  */
 const removeBind = connect('off');
 
+// const defaultHeight = '300px';
 const defaultHeight = '300px';
 
 const defaultStyle: CSSProperties = {
@@ -120,7 +122,7 @@ export const Core = forwardRef<CoreRef, ReactEchartProps>(
 		/**
 		 * use Resize Observer as chart size trigger
 		 */
-		useResize({
+		const deBounceResize = useResize({
 			ref: dom,
 			fun: resize,
 			debounceDelay,
@@ -177,10 +179,12 @@ export const Core = forwardRef<CoreRef, ReactEchartProps>(
 		const initEchart = useCallback(() => {
 			// if extensions is not empty, use extensions
 			// otherwise, do not use extensions
-			if (dom.current && finished && Array.isArray(extensions) && extensions.length > 0) {
+			if (dom.current && finished) {
 				setUpdatePreparation(false);
 				// finished means that all extensions has downloaded
-				use(extensions);
+				if (Array.isArray(extensions) && extensions.length > 0) {
+					use(extensions);
+				}
 
 				/**
 				 * now, initEchart will also be activated by other props
@@ -259,8 +263,8 @@ export const Core = forwardRef<CoreRef, ReactEchartProps>(
 		}, [isUpdatePreparation, render]);
 
 		useLayoutEffect(() => {
-			resize();
-		}, [className, resize, style]);
+			deBounceResize();
+		}, [className, deBounceResize, style]);
 		/**
 		 * when window resize
 		 */

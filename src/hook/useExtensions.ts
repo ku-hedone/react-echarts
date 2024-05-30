@@ -45,12 +45,14 @@ const useExtensions = (
 			// get extensions keys from current options
 			const currentOptionExtKeys: ExtensionsKey[] = [];
 			const keys = Reflect.ownKeys(currentOption) as ExtensionsKey[];
+			// console.log('%c keys', 'color:black', keys);
 			for (const key of keys) {
 				// ensure option need import extension
 				if (extraExts.includes(key)) {
 					currentOptionExtKeys.push(key);
 				}
 			}
+			// console.log('%c currentOptionExtKeys', 'color:blue', currentOptionExtKeys);
 			let changed =
 				currentOptionExtKeys.length !== 0
 					? currentOptionExtKeys.length !== extSnapShoot.current.size
@@ -91,6 +93,17 @@ const useExtensions = (
 					console.groupEnd();
 				} catch (e) {
 					console.error('use extensions error', e);
+				}
+			} else {
+				// Upon initial render, if the option does not contain the extension-related properties
+				// while goto this branch,
+				if (!innerFinished.current) {
+					innerFinished.current = true;
+					const extensions = await immutableApplyExtensions.current({});
+					setExtensions(extensions);
+					setFinished(true);
+					innerFinished.current = true;
+					extSnapShoot.current = nextExtSnapShoot;
 				}
 			}
 			isConsuming.current = false;
