@@ -1,5 +1,6 @@
-import { useLayoutEffect, useRef, RefObject } from 'react';
+import { useLayoutEffect } from 'react';
 import { useDebouncedCallback } from './useDebouncedCallback';
+import type { RefObject } from 'react';
 
 export const useResize = ({
 	ref,
@@ -8,9 +9,8 @@ export const useResize = ({
 }: {
 	ref: RefObject<HTMLDivElement>;
 	debounceDelay?: number;
-	fun: (entry: ResizeObserverEntry) => unknown;
+	fun: (entry?: ResizeObserverEntry) => unknown;
 }) => {
-	const animationFrameRef = useRef<number[]>([]);
 	const debounced = useDebouncedCallback(
 		fun,
 		/**
@@ -25,27 +25,17 @@ export const useResize = ({
 		}
 
 		const resizeObserver = new ResizeObserver((entries) => {
-			entries.forEach((entry, index) => {
-				animationFrameRef.current[index] = window.requestAnimationFrame(() => {
-					/**
-					 * executed when there is not empty
-					 */
-					debounced(entry);
-				});
+			entries.forEach((entry) => {
+				debounced(entry);
 			});
 		});
 
 		resizeObserver.observe(element);
 
 		return () => {
-			const animationFrames = animationFrameRef.current;
-			if (animationFrames.length) {
-				animationFrames.forEach((i) => {
-					window.cancelAnimationFrame(i);
-				});
-			}
-			animationFrameRef.current = [];
 			resizeObserver.unobserve(element);
 		};
 	}, [ref, debounced, fun]);
+
+	return debounced;
 };
