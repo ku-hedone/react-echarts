@@ -1,4 +1,4 @@
-import type { CallbackDataParams } from 'echarts/types/dist/shared';
+import type { DefaultLabelFormatterCallbackParams } from 'echarts';
 
 /**
  * react-echart support base Events
@@ -28,7 +28,7 @@ export type OmitEventOnSymbol<T extends string> = T extends `on${infer A}`
  */
 export type EchartsEventSource = Record<
 	EchartsEventName,
-	(params: CallbackDataParams) => void
+	(params: DefaultLabelFormatterCallbackParams) => void
 >;
 /**
  * transform chart events props to array

@@ -9,8 +9,7 @@ import type {
 	VisualMapComponentOption,
 	GraphicComponentOption,
 } from 'echarts/components';
-import type { ECharts } from 'echarts/core';
-import type { EChartsOption, ComposeOption } from 'echarts/types/dist/shared';
+import type { ECharts, ComposeOption } from 'echarts';
 import type { CSSProperties } from 'react';
 import type { EchartsEventSource } from './event';
 
@@ -140,19 +139,25 @@ export type ExtensionsComponent =
 /**
  * attributes which need be use extension
  */
-export type ExtensionsKeyValue = Pick<
-	EChartsOption,
-	| 'visualMap'
-	| 'tooltip'
-	| 'title'
-	| 'legend'
-	| 'toolbox'
-	| 'timeline'
-	| 'grid'
+export type ExtensionsKey =
 	| 'dataset'
+	| 'title'
+	| 'toolbox'
+	| 'tooltip'
+	| 'grid'
+	| 'legend'
+	| 'visualMap'
 	| 'graphic'
->;
+	| 'timeline';
 
 export type ChartType = typeof ChartTypes[number];
 
 export type AdapterEChartsOption = ComposeOption<ExtensionsComponent>;
+
+/**
+ * attributes which need be use extension
+ */
+export type ExtensionsKeyValue = Partial<Record<
+	ExtensionsKey,
+	true
+>>;

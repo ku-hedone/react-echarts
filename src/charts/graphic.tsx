@@ -3,7 +3,7 @@ import GraphicComponent from '../components/GraphicComponent';
 import Core from '../core';
 import type { EchartsProps } from '../types/base';
 import type { FC } from 'react';
-import type { EChartsOption } from 'echarts/types/dist/shared';
+import type { EChartsOption } from 'echarts';
 import type { RecordToArray } from '../types/event';
 
 export interface GraphicProps

@@ -1,4 +1,4 @@
-import type { ECharts } from 'echarts/core';
+import type { EChartsType } from 'echarts';
 import type { RecordToArray } from '../types/event';
 
 /**
@@ -8,7 +8,7 @@ import type { RecordToArray } from '../types/event';
  */
 export const connect =
 	(type: 'on' | 'off' = 'on') =>
-	(instance: ECharts, event: RecordToArray) => {
+	(instance: EChartsType, event: RecordToArray) => {
 		/**
 		 * fn = instance[type]  will lose this
 		 *

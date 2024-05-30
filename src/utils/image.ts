@@ -1,7 +1,7 @@
-import type { ECharts } from 'echarts/core';
+import type { EChartsType } from 'echarts';
 import type { ImageOptions } from '../types/image';
 
-export const saveAsImage = (instance: ECharts, options: ImageOptions) => {
+export const saveAsImage = (instance: EChartsType, options: ImageOptions) => {
 	const rendererType = instance.getZr().painter.getType();
 	const { type = 'png' } = options;
 

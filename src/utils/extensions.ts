@@ -1,5 +1,5 @@
 import { LabelLayout } from 'echarts/features';
-import { use } from 'echarts/types/dist/shared';
+import { use } from 'echarts/core';
 import type { ExtensionsKeyValue } from '../types/base';
 
 export type Extensions = Parameters<typeof use>[0];

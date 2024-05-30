@@ -7,12 +7,12 @@ import {
 	useImperativeHandle,
 	forwardRef,
 } from 'react';
-import { dispose, getInstanceByDom, init, use } from 'echarts/core';
+import { getInstanceByDom } from 'echarts';
+import { dispose, init, use } from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
 import { connect } from '../utils/event';
 import { useResize } from '../hook/useResize';
-import type { ECharts } from 'echarts/core';
-import type { EChartsOption } from 'echarts/types/dist/shared';
+import type { EChartsOption, EChartsType } from 'echarts';
 import type { EchartsProps } from '../types/base';
 import type { EchartsEventName, RecordToArray } from '../types/event';
 import type { Extensions } from '../utils/extensions';
@@ -25,7 +25,7 @@ interface ReactEchartProps extends Omit<EchartsProps<EChartsOption>, EchartsEven
 }
 
 export interface CoreRef {
-	instance: () => ECharts | undefined;
+	instance: () => EChartsType | undefined;
 }
 
 use([CanvasRenderer]);
@@ -73,7 +73,7 @@ export const Core = forwardRef<CoreRef, ReactEchartProps>(
 		/**
 		 * echarts instance
 		 */
-		const instance = useRef<ECharts>();
+		const instance = useRef<EChartsType>();
 		/**
 		 * last events
 		 *

@@ -8,9 +8,9 @@ export const useResize = ({
 }: {
 	ref: RefObject<HTMLDivElement>;
 	debounceDelay?: number;
-	fun: (...props: unknown[]) => unknown;
+	fun: (entry: ResizeObserverEntry) => unknown;
 }) => {
-	const animationFrameRef = useRef<number>();
+	const animationFrameRef = useRef<number[]>([]);
 	const debounced = useDebouncedCallback(
 		fun,
 		/**
@@ -25,23 +25,26 @@ export const useResize = ({
 		}
 
 		const resizeObserver = new ResizeObserver((entries) => {
-			animationFrameRef.current = window.requestAnimationFrame(() => {
-				/**
-				 * executed when there is not empty
-				 */
-				if (!Array.isArray(entries) || !entries.length) {
-					return;
-				}
-				debounced();
+			entries.forEach((entry, index) => {
+				animationFrameRef.current[index] = window.requestAnimationFrame(() => {
+					/**
+					 * executed when there is not empty
+					 */
+					debounced(entry);
+				});
 			});
 		});
 
 		resizeObserver.observe(element);
 
 		return () => {
-			if (animationFrameRef.current) {
-				window.cancelAnimationFrame(animationFrameRef.current);
+			const animationFrames = animationFrameRef.current;
+			if (animationFrames.length) {
+				animationFrames.forEach((i) => {
+					window.cancelAnimationFrame(i);
+				});
 			}
+			animationFrameRef.current = [];
 			resizeObserver.unobserve(element);
 		};
 	}, [ref, debounced, fun]);

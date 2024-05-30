@@ -2,6 +2,7 @@ import { forwardRef, useMemo } from 'react';
 import Core, { CoreRef } from '../core';
 import { startWith } from '../utils/event';
 import useExtensions from '../hook/useExtensions';
+import type { EChartsOption } from 'echarts';
 import type { AdapterEChartsOption, EchartsProps } from '../types/base';
 import type { OmitEventOnSymbol, RecordToArray } from '../types/event';
 import type { Extensions } from '../utils/extensions';
@@ -68,7 +69,7 @@ export const Adapter = forwardRef<AdapterRef, AdapterProps>(
 		return (
 			<Core
 				ref={ref}
-				options={options}
+				options={options as EChartsOption}
 				style={style}
 				className={className}
 				theme={theme}

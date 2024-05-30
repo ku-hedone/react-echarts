@@ -1,6 +1,6 @@
 import { useRef, useState, useCallback, useEffect } from 'react';
 import applyExtensions from '../utils/extensions';
-import type { EchartsProps, AdapterEChartsOption } from '../types/base';
+import type { EchartsProps, AdapterEChartsOption, ExtensionsKey } from '../types/base';
 import type { Extensions } from '../utils/extensions';
 
 const extraExts = [
@@ -43,8 +43,9 @@ const useExtensions = (
 			// Decouple value reference, so that subsequent assignments to the nextOption Ref will not effect the current logic.
 			nextOption.current = undefined;
 			// get extensions keys from current options
-			const currentOptionExtKeys: string[] = [];
-			for (const key in currentOption) {
+			const currentOptionExtKeys: ExtensionsKey[] = [];
+			const keys = Reflect.ownKeys(currentOption) as ExtensionsKey[];
+			for (const key of keys) {
 				// ensure option need import extension
 				if (extraExts.includes(key)) {
 					currentOptionExtKeys.push(key);
@@ -73,7 +74,7 @@ const useExtensions = (
 					// prevented options update's conflict
 					innerFinished.current = false;
 				}
-				const record: Record<string, true> = {};
+				const record = {} as Record<ExtensionsKey, true>;
 				currentOptionExtKeys.forEach((v) => {
 					record[v] = true;
 				});
