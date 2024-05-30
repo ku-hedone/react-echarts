@@ -6,12 +6,15 @@ import {
 	useEffect,
 	useImperativeHandle,
 	forwardRef,
+	memo
 } from 'react';
 import { getInstanceByDom } from 'echarts';
 import { dispose, init, use } from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
-import { connect } from '../utils/event';
 import { useResize } from '../hook/useResize';
+import { connect } from '../utils/event';
+import { isSameStyle, isSameTheme, isSameEvent } from '../utils/compare';
+import type { CSSProperties } from 'react';
 import type { EChartsOption, EChartsType } from 'echarts';
 import type { EchartsProps } from '../types/base';
 import type { EchartsEventName, RecordToArray } from '../types/event';
@@ -38,24 +41,28 @@ const bind = connect();
  */
 const removeBind = connect('off');
 
-const defaultHeight = 'fit-content';
-const defaultMinHeight = '300px';
+const defaultHeight = '300px';
+
+const defaultStyle: CSSProperties = {
+	height: defaultHeight,
+};
 
 export const Core = forwardRef<CoreRef, ReactEchartProps>(
 	(
 		{
 			theme,
 			options,
-			notMerge = true,
+			// notMerge = true,
 			lazyUpdate = false,
 			debounceDelay = 0,
 			showLoading,
-			className,
-			style,
+			className = '',
+			style = defaultStyle,
 			extensions,
 			onFinish,
 			events,
 			finished,
+			autoResize = true,
 		},
 		ref,
 	) => {
@@ -91,20 +98,25 @@ export const Core = forwardRef<CoreRef, ReactEchartProps>(
 		/**
 		 * when inline style or className changed, resize
 		 */
-		const resize = () => {
-			const echartInstance = instance.current;
-			if (echartInstance && !isFirstResize.current) {
-				try {
-					echartInstance.resize({
-						width: 'auto',
-						height: 'auto',
-					});
-				} catch (e) {
-					console.warn(e);
+		const resize = useCallback(
+			(_entry?: ResizeObserverEntry) => {
+				const echartInstance = instance.current;
+				if (echartInstance && !isFirstResize.current) {
+					if (autoResize) {
+						try {
+							echartInstance.resize({
+								width: 'auto',
+								height: 'auto',
+							});
+						} catch (e) {
+							console.warn(e);
+						}
+					}
 				}
-			}
-			isFirstResize.current = false;
-		};
+				isFirstResize.current = false;
+			},
+			[autoResize],
+		);
 		/**
 		 * use Resize Observer as chart size trigger
 		 */
@@ -245,7 +257,7 @@ export const Core = forwardRef<CoreRef, ReactEchartProps>(
 
 		useLayoutEffect(() => {
 			resize();
-		}, [className, style]);
+		}, [className, resize, style]);
 		/**
 		 * when window resize
 		 */
@@ -268,11 +280,57 @@ export const Core = forwardRef<CoreRef, ReactEchartProps>(
 		return (
 			<div
 				ref={dom}
-				style={style || { height: defaultHeight, minHeight: defaultMinHeight }}
-				className={className || ''}
+				style={style}
+				className={className}
 			/>
 		);
 	},
 );
 
-export default Core;
+export default memo(Core, (prev, current) => {
+	// string
+	if (prev.className !== current.className) {
+		return false;
+	}
+	// number
+	if (prev.debounceDelay !== current.debounceDelay) {
+		return false;
+	}
+	// boolean
+	if (prev.finished !== current.finished) {
+		return false;
+	}
+	if (prev.showLoading !== current.showLoading) {
+		return false;
+	}
+	if (prev.lazyUpdate !== current.lazyUpdate) {
+		return false;
+	}
+	if (prev.autoResize !== current.autoResize) {
+		return false;
+	}
+	// CSSProperties
+	if (!isSameStyle(prev.style, current.style)) {
+		return false;
+	}
+	// Union Type
+	if (!isSameTheme(prev.theme, current.theme)) {
+		return false;
+	}
+	// Union Type
+	if (prev.options !== current.options) {
+		return false;
+	}
+	// array
+	if (prev.extensions !== current.extensions) {
+		return false;
+	}
+	if (!isSameEvent(prev.events, current.events)) {
+		return false;
+	}
+	// function
+	if (prev.onFinish !== current.onFinish) {
+		return false;
+	}
+	return true;
+});

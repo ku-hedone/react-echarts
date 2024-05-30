@@ -121,6 +121,10 @@ export interface EchartsProps<T> extends Partial<EchartsEventSource> {
 	onFinish?: (instance: ECharts) => void;
 	style?: CSSProperties;
 	className?: string;
+	/**
+	 * enable auto resize feature
+	 */
+	autoResize?: boolean;
 }
 /**
  * normal extensions type

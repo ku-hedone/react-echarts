@@ -28,6 +28,7 @@ export const Adapter = forwardRef<AdapterRef, AdapterProps>(
 			lazyUpdate,
 			showLoading,
 			debounceDelay,
+			autoResize,
 			...other
 		},
 		ref,
@@ -81,6 +82,7 @@ export const Adapter = forwardRef<AdapterRef, AdapterProps>(
 				onFinish={onFinish}
 				events={events}
 				finished={finished}
+				autoResize={autoResize}
 			/>
 		);
 	},
