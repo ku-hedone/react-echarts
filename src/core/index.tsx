@@ -141,6 +141,9 @@ export const Core = forwardRef<CoreRef, ReactEchartProps>(
 				if ('series' in options) {
 					mergerOptions.push('series');
 				}
+				if ('yAxis' in options) {
+					mergerOptions.push('yAxis');
+				}
 				echartInstance.setOption(options, {
 					replaceMerge: mergerOptions,
 					lazyUpdate,
