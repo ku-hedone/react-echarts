@@ -37,8 +37,10 @@ export const saveAsImage = (instance: EChartsType, options: ImageOptions) => {
 			const parts = url.split(',');
 			// data:[<mime type>][;charset=<charset>][;base64],<encoded data>
 			const base64Encoded = parts[0].indexOf('base64') > -1;
-			// should decode the svg data uri first
-			let bufferStr = isSvg ? decodeURIComponent(parts[1]) : parts[1];
+			let bufferStr = isSvg
+				? // should decode the svg data uri first
+					decodeURIComponent(parts[1])
+				: parts[1];
 			// only `atob` when the data uri is encoded with base64
 			// otherwise, like `svg` data uri exported by zrender,
 			// there will be an error, for it's not encoded with base64.
