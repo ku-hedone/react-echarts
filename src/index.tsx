@@ -1,11 +1,12 @@
+export * from './adapter';
 export * from './charts/bar';
-export * from './charts/line';
+export * from './charts/funnel';
 export * from './charts/graphic';
 export * from './charts/gauge';
 export * from './charts/heatmap';
+export * from './charts/line';
 export * from './charts/pie';
 export * from './charts/sankey';
-export * from './charts/funnel';
-export * from './adapter';
+export * from './charts/sunburst';
 export * from './core';
 export { saveAsImage } from './utils/image';
