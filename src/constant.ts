@@ -1,8 +1,11 @@
 export const ChartTypes = [
 	'bar',
+	'funnel',
 	'gauge',
+	'graphic',
 	'heatmap',
+	'line',
 	'pie',
 	'sankey',
-	'graphic',
+	'sunburst',
 ] as const;
