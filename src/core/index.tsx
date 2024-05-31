@@ -11,14 +11,14 @@ import {
 import { getInstanceByDom } from 'echarts';
 import { dispose, init, use } from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
-import { useResize } from '../hook/useResize';
 import { connect } from '../utils/event';
+import { useResize } from '../hook/useResize';
 import { isSameStyle, isSameTheme, isSameEvent } from '../utils/compare';
 import type { CSSProperties } from 'react';
-import type { EchartsProps } from '../types/base';
-import type { EchartsEventName, RecordToArray } from '../types/event';
-import type { Extensions } from '../utils/extensions';
 import type { EChartsOption, EChartsType } from 'echarts';
+import type { EchartsProps } from '../types/base';
+import type { Extensions } from '../utils/extensions';
+import type { EchartsEventName, RecordToArray } from '../types/event';
 
 interface ReactEchartProps extends Omit<EchartsProps<EChartsOption>, EchartsEventName> {
 	readonly options: EChartsOption;
