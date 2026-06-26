@@ -1,17 +1,18 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import type { EChartsType } from 'echarts/core';
 
 describe('saveAsImage - window.open fallback', () => {
-  const originalMouseEvent = global.MouseEvent;
+  const originalMouseEvent = globalThis.MouseEvent;
   const originalNavigator = window.navigator;
   const originalOpen = window.open;
 
   beforeEach(() => {
     // Mock MouseEvent to not be a function to trigger else branch
-    (global as any).MouseEvent = undefined;
+    globalThis.MouseEvent = undefined as unknown as typeof MouseEvent;
   });
 
   afterEach(() => {
-    global.MouseEvent = originalMouseEvent;
+    globalThis.MouseEvent = originalMouseEvent;
     Object.defineProperty(window, 'navigator', {
       value: originalNavigator,
       writable: true,
@@ -40,7 +41,7 @@ describe('saveAsImage - window.open fallback', () => {
         backgroundColor: '#fff',
       })),
       getConnectedDataURL: vi.fn(() => 'data:image/png;base64,mock'),
-    };
+    } as unknown as EChartsType;
 
     const { saveAsImage } = await import('../../utils/image');
     saveAsImage(mockInstance, { title: 'test-chart' });
@@ -62,7 +63,7 @@ describe('saveAsImage - window.open fallback', () => {
         backgroundColor: '#fff',
       })),
       getConnectedDataURL: vi.fn(() => 'data:image/png;base64,mock'),
-    };
+    } as unknown as EChartsType;
 
     const { saveAsImage } = await import('../../utils/image');
 
@@ -90,7 +91,7 @@ describe('saveAsImage - window.open fallback', () => {
       })),
       getOption: vi.fn(() => ({})),
       getConnectedDataURL: vi.fn(() => 'data:image/png;base64,mock'),
-    };
+    } as unknown as EChartsType;
 
     const { saveAsImage } = await import('../../utils/image');
     saveAsImage(mockInstance, { title: 'test' });

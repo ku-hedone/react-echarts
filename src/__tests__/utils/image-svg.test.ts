@@ -1,16 +1,17 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import type { EChartsType } from 'echarts/core';
 
 describe('saveAsImage - SVG iframe fallback', () => {
-  const originalMouseEvent = global.MouseEvent;
+  const originalMouseEvent = globalThis.MouseEvent;
   const originalNavigator = window.navigator;
 
   beforeEach(() => {
     // Mock MouseEvent to not be a function to trigger else branch
-    (global as any).MouseEvent = undefined;
+    globalThis.MouseEvent = undefined as unknown as typeof MouseEvent;
   });
 
   afterEach(() => {
-    global.MouseEvent = originalMouseEvent;
+    globalThis.MouseEvent = originalMouseEvent;
     Object.defineProperty(window, 'navigator', {
       value: originalNavigator,
       writable: true,
@@ -53,7 +54,7 @@ describe('saveAsImage - SVG iframe fallback', () => {
       getConnectedDataURL: vi.fn(
         () => 'data:image/svg+xml;charset=utf-8,%3Csvg%3E%3C/svg%3E',
       ),
-    };
+    } as unknown as EChartsType;
 
     const { saveAsImage } = await import('../../utils/image');
     saveAsImage(mockInstance, { title: 'test', type: 'svg' });
@@ -103,7 +104,7 @@ describe('saveAsImage - SVG iframe fallback', () => {
       getConnectedDataURL: vi.fn(
         () => 'data:image/svg+xml;charset=utf-8,%3Csvg%3E%3C/svg%3E',
       ),
-    };
+    } as unknown as EChartsType;
 
     const { saveAsImage } = await import('../../utils/image');
 
@@ -150,7 +151,7 @@ describe('saveAsImage - SVG iframe fallback', () => {
         backgroundColor: '#fff',
       })),
       getConnectedDataURL: vi.fn(() => 'data:image/svg+xml;base64,PHN2Zz48L3N2Zz4='),
-    };
+    } as unknown as EChartsType;
 
     const { saveAsImage } = await import('../../utils/image');
     saveAsImage(mockInstance, { title: 'test', type: 'svg' });
