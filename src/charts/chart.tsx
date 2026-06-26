@@ -41,6 +41,28 @@ export type ChartComponentProps =
       type: 'sunburst';
     } & SunBurstProps);
 
+type LazyChartComponent = FC<Omit<ChartComponentProps, 'type'>>;
+
+const chartLoaders: Record<ChartType, () => Promise<{ default: LazyChartComponent }>> = {
+  bar: () => import('./bar').then(res => ({ default: res.Bar as LazyChartComponent })),
+  gauge: () =>
+    import('./gauge').then(res => ({ default: res.Gauge as LazyChartComponent })),
+  heatmap: () =>
+    import('./heatmap').then(res => ({ default: res.HeatMap as LazyChartComponent })),
+  line: () => import('./line').then(res => ({ default: res.Line as LazyChartComponent })),
+  pie: () => import('./pie').then(res => ({ default: res.Pie as LazyChartComponent })),
+  funnel: () =>
+    import('./funnel').then(res => ({ default: res.Funnel as LazyChartComponent })),
+  sankey: () =>
+    import('./sankey').then(res => ({ default: res.Sankey as LazyChartComponent })),
+  graphic: () =>
+    import('./graphic').then(res => ({ default: res.Graphic as LazyChartComponent })),
+  sunburst: () =>
+    import('./sunburst').then(res => ({
+      default: res.SunBurst as LazyChartComponent,
+    })),
+};
+
 export const Chart: FC<ChartComponentProps> = ({ type, options, ...other }) => {
   try {
     if (typeof type === 'undefined' || !type) {
@@ -50,16 +72,7 @@ export const Chart: FC<ChartComponentProps> = ({ type, options, ...other }) => {
     if (ChartTypes.indexOf(type) === -1) {
       throw new Error(`type must in ${ChartTypes.toString()}`);
     }
-    const Chart = lazy<FC<Omit<ChartComponentProps, 'type'>>>(async () =>
-      import(`../charts/${type}.js`).then(res => {
-        const ChartName = type.split('');
-        ChartName[0] = ChartName[0].toLocaleUpperCase();
-        return {
-          ...res,
-          default: res[ChartName.join('')],
-        };
-      }),
-    );
+    const Chart = lazy<LazyChartComponent>(chartLoaders[type]);
     return (
       <Suspense fallback={null}>
         <Chart options={options} {...other} />

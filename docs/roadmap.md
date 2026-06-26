@@ -7,12 +7,13 @@
 - [x] 添加完整文档（CLAUDE.md, docs/）
 - [x] 优化 ECharts 导入（统一从 echarts/core 导入运行时代码）
 - [x] 移除 forwardRef，使用 React 19 的 ref as prop 特性
+- [x] 搭建测试体系（Vitest + React Testing Library + Playwright）
 
 ## 计划中
 
 ### 短期（1-2 个月）
 
-- [ ] 添加单元测试（Vitest + React Testing Library）
+- [ ] 增加测试覆盖率（目标 80%+）
 - [ ] 添加 Storybook 组件文档
 - [ ] 配置 CI/CD 自动化流程
 

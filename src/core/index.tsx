@@ -250,8 +250,10 @@ export const Core = memo(
      * when window resize
      */
     useEffect(() => {
-      updateEchartLoading();
-    }, [updateEchartLoading]);
+      if (isUpdatePreparation) {
+        updateEchartLoading();
+      }
+    }, [isUpdatePreparation, updateEchartLoading]);
 
     useLayoutEffect(() => {
       initEchart();

@@ -37,7 +37,8 @@ npm install @hedone/react-echart
 - **包管理**：pnpm
 - **Linter**：oxlint 1.71（Rust 编写，比 ESLint 快 50-100 倍）
 - **Formatter**：oxfmt 0.56（Rust 编写，比 Prettier 快 35 倍+）
-- **测试框架**：Vitest 4.x + React Testing Library
+- **单元测试**：Vitest 4.x + React Testing Library
+- **E2E 测试**：Playwright 1.61
 
 ## 常用命令
 
@@ -62,10 +63,15 @@ pnpm run lint:fix
 pnpm run format
 pnpm run format:check
 
-# 测试
+# 单元测试
 pnpm run test           # watch 模式
 pnpm run test:run       # 单次运行
 pnpm run test:coverage  # 覆盖率报告
+
+# E2E 测试
+pnpm run test:e2e       # 运行 E2E 测试
+pnpm run test:e2e:ui    # 打开 Playwright UI
+pnpm run test:e2e:install  # 安装浏览器
 ```
 
 ## 项目结构
