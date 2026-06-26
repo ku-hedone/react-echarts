@@ -1,6 +1,16 @@
+src/
+test/
+coverage/
 *.tsconfig.json
+tsup.config.ts
+vitest.config.ts
+.oxlintrc.json
+.oxfmtrc.json
+.husky/
+.gitignore
+.eslintrc.js
+.prettierrc
 *.log
 *.lock
 .**.*
 .yarnrc
-src/

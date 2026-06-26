@@ -7,19 +7,19 @@ import type { RecordToArray } from '../types/event';
  * @returns
  */
 export const connect =
-	(type: 'on' | 'off' = 'on') =>
-	(instance: EChartsType, event: RecordToArray) => {
-		/**
-		 * fn = instance[type]  will lose this
-		 *
-		 * so need bind this
-		 *
-		 */
-		const fn = instance[type].bind(instance);
-		event.forEach((i) => {
-			fn(i.eventName, i.callback);
-		});
-	};
+  (type: 'on' | 'off' = 'on') =>
+  (instance: EChartsType, event: RecordToArray) => {
+    /**
+     * fn = instance[type]  will lose this
+     *
+     * so need bind this
+     *
+     */
+    const fn = instance[type].bind(instance);
+    event.forEach(i => {
+      fn(i.eventName, i.callback);
+    });
+  };
 /**
  *
  * @param target target str
@@ -28,19 +28,19 @@ export const connect =
  * @returns
  */
 export const startWith = (target: string, search: string, start = 0) => {
-	// if String has startsWith
-	if (Object.prototype.hasOwnProperty.call(String.prototype, 'startsWith')) {
-		return target.startsWith(search, start);
-	}
-	// profiled
-	let i = 0;
-	const size = search.length;
-	while (i < size) {
-		if (target[start + i] === search[i]) {
-			i++;
-		} else {
-			return false;
-		}
-	}
-	return true;
+  // if String has startsWith
+  if (Object.prototype.hasOwnProperty.call(String.prototype, 'startsWith')) {
+    return target.startsWith(search, start);
+  }
+  // profiled
+  let i = 0;
+  const size = search.length;
+  while (i < size) {
+    if (target[start + i] === search[i]) {
+      i++;
+    } else {
+      return false;
+    }
+  }
+  return true;
 };

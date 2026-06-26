@@ -1,5 +1,4 @@
 node_modules/
-cjs/
-esm/
-typings/
-yarn-error.log
+dist/
+coverage/
+*.log
