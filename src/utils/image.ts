@@ -1,4 +1,4 @@
-import type { EChartsType } from 'echarts';
+import type { EChartsType } from 'echarts/core';
 import type { ImageOptions } from '../types/image';
 
 export const saveAsImage = (instance: EChartsType, options: ImageOptions) => {

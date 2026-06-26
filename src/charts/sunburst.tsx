@@ -1,6 +1,6 @@
 import { SunburstChart } from 'echarts/charts';
 import Adapter from '../adapter';
-import { forwardRef, useMemo } from 'react';
+import { useMemo } from 'react';
 import type { SunburstSeriesOption } from 'echarts/charts';
 import type { CoreRef } from '../core';
 import type {
@@ -9,14 +9,17 @@ import type {
   ExtensionsComponent,
   GeneratorOptions,
 } from '../types/base';
+import type { Ref } from 'react';
 
 export interface SunBurstProps extends EchartsProps<
   GeneratorOptions<SunburstSeriesOption, ExtensionsComponent> & Axis
-> {}
+> {
+  ref?: Ref<CoreRef>;
+}
 
-const SunBurst = forwardRef<CoreRef, SunBurstProps>((props, ref) => {
+const SunBurst = ({ ref, ...props }: SunBurstProps) => {
   const SunBurstExtensions = useMemo(() => [SunburstChart], []);
   return <Adapter use={SunBurstExtensions} ref={ref} {...props} />;
-});
+};
 
 export { SunBurst };

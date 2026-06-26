@@ -5,17 +5,16 @@ import {
   useState,
   useEffect,
   useImperativeHandle,
-  forwardRef,
   memo,
 } from 'react';
-import { getInstanceByDom } from 'echarts';
-import { dispose, init, use } from 'echarts/core';
+import { getInstanceByDom, dispose, init, use } from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
 import { connect } from '../utils/event';
 import { useResize } from '../hook/useResize';
 import { isSameStyle, isSameTheme, isSameEvent } from '../utils/compare';
-import type { CSSProperties } from 'react';
-import type { EChartsOption, EChartsType } from 'echarts';
+import type { CSSProperties, Ref } from 'react';
+import type { EChartsOption } from 'echarts';
+import type { EChartsType } from 'echarts/core';
 import type { EchartsProps } from '../types/base';
 import type { Extensions } from '../utils/extensions';
 import type { EchartsEventName, RecordToArray } from '../types/event';
@@ -26,6 +25,7 @@ interface ReactEchartProps extends Omit<EchartsProps<EChartsOption>, EchartsEven
   events: RecordToArray;
   finished: boolean;
   autoResize?: boolean;
+  ref?: Ref<CoreRef>;
 }
 
 export interface CoreRef {
@@ -49,25 +49,23 @@ const defaultStyle: CSSProperties = {
   height: '100%',
 };
 
-export const Core = forwardRef<CoreRef, ReactEchartProps>(
-  (
-    {
-      theme,
-      options,
-      // notMerge = true,
-      lazyUpdate = false,
-      debounceDelay = 0,
-      showLoading,
-      className = '',
-      style = defaultStyle,
-      extensions,
-      onFinish,
-      events,
-      finished,
-      autoResize = true,
-    },
+export const Core = memo(
+  ({
+    theme,
+    options,
+    // notMerge = true,
+    lazyUpdate = false,
+    debounceDelay = 0,
+    showLoading,
+    className = '',
+    style = defaultStyle,
+    extensions,
+    onFinish,
+    events,
+    finished,
+    autoResize = true,
     ref,
-  ) => {
+  }: ReactEchartProps) => {
     // TODO: use Sequence Component to change into sync coding style
     // so need a flag to control render
     // when uninitialized, can not be render
@@ -195,7 +193,7 @@ export const Core = forwardRef<CoreRef, ReactEchartProps>(
          * but this is useless and waste of calculate resource
          *
          * need be optimized to that way
-         * just extensions & theme‘s value diff from last
+         * just extensions & theme's value diff from last
          */
         if (instance.current) {
           // if instance already existed
@@ -289,52 +287,53 @@ export const Core = forwardRef<CoreRef, ReactEchartProps>(
 
     return <div ref={dom} style={style} className={className} />;
   },
+  (prev, current) => {
+    // string
+    if (prev.className !== current.className) {
+      return false;
+    }
+    // number
+    if (prev.debounceDelay !== current.debounceDelay) {
+      return false;
+    }
+    // boolean
+    if (prev.finished !== current.finished) {
+      return false;
+    }
+    if (prev.showLoading !== current.showLoading) {
+      return false;
+    }
+    if (prev.lazyUpdate !== current.lazyUpdate) {
+      return false;
+    }
+    if (prev.autoResize !== current.autoResize) {
+      return false;
+    }
+    // CSSProperties
+    if (!isSameStyle(prev.style, current.style)) {
+      return false;
+    }
+    // Union Type
+    if (!isSameTheme(prev.theme, current.theme)) {
+      return false;
+    }
+    // Union Type
+    if (prev.options !== current.options) {
+      return false;
+    }
+    // array
+    if (prev.extensions !== current.extensions) {
+      return false;
+    }
+    if (!isSameEvent(prev.events, current.events)) {
+      return false;
+    }
+    // function
+    if (prev.onFinish !== current.onFinish) {
+      return false;
+    }
+    return true;
+  },
 );
 
-export default memo(Core, (prev, current) => {
-  // string
-  if (prev.className !== current.className) {
-    return false;
-  }
-  // number
-  if (prev.debounceDelay !== current.debounceDelay) {
-    return false;
-  }
-  // boolean
-  if (prev.finished !== current.finished) {
-    return false;
-  }
-  if (prev.showLoading !== current.showLoading) {
-    return false;
-  }
-  if (prev.lazyUpdate !== current.lazyUpdate) {
-    return false;
-  }
-  if (prev.autoResize !== current.autoResize) {
-    return false;
-  }
-  // CSSProperties
-  if (!isSameStyle(prev.style, current.style)) {
-    return false;
-  }
-  // Union Type
-  if (!isSameTheme(prev.theme, current.theme)) {
-    return false;
-  }
-  // Union Type
-  if (prev.options !== current.options) {
-    return false;
-  }
-  // array
-  if (prev.extensions !== current.extensions) {
-    return false;
-  }
-  if (!isSameEvent(prev.events, current.events)) {
-    return false;
-  }
-  // function
-  if (prev.onFinish !== current.onFinish) {
-    return false;
-  }
-  return true;
-});
+export default Core;

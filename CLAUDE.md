@@ -26,6 +26,7 @@ npm install @hedone/react-echart
 - [开发指南](docs/development-guide.md) - 环境搭建、构建命令、代码规范
 - [API 参考](docs/api-reference.md) - 完整的类型定义和 API 文档
 - [现代化升级路线](docs/modernization-plan.md) - 技术栈升级计划和迁移指南
+- [Roadmap](docs/roadmap.md) - 版本计划和技术决策记录
 
 ## 技术栈
 

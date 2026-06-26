@@ -1,6 +1,6 @@
 import { HeatmapChart } from 'echarts/charts';
 import Adapter from '../adapter';
-import { forwardRef, useMemo } from 'react';
+import { useMemo } from 'react';
 import type { HeatmapSeriesOption } from 'echarts/charts';
 import type { CoreRef } from '../core';
 import type {
@@ -9,13 +9,17 @@ import type {
   ExtensionsComponent,
   GeneratorOptions,
 } from '../types/base';
+import type { Ref } from 'react';
+
 export interface HeatMapProps extends EchartsProps<
   GeneratorOptions<HeatmapSeriesOption, ExtensionsComponent> & Axis
-> {}
+> {
+  ref?: Ref<CoreRef>;
+}
 
-const HeatMap = forwardRef<CoreRef, HeatMapProps>((props, ref) => {
+const HeatMap = ({ ref, ...props }: HeatMapProps) => {
   const HeatMapExtensions = useMemo(() => [HeatmapChart], []);
   return <Adapter use={HeatMapExtensions} ref={ref} {...props} />;
-});
+};
 
 export { HeatMap };
