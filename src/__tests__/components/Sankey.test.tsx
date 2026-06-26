@@ -1,22 +1,26 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, waitFor } from '@testing-library/react';
 import { Sankey } from '../../charts/sankey';
 
-// Mock ECharts
-vi.mock('echarts/core', () => ({
-  init: vi.fn(() => ({
-    setOption: vi.fn(),
-    resize: vi.fn(),
-    dispose: vi.fn(),
-    getOption: vi.fn(() => ({})),
-    showLoading: vi.fn(),
-    hideLoading: vi.fn(),
-    on: vi.fn(),
-    off: vi.fn(),
-  })),
+// Create mock instance
+const createMockInstance = () => ({
+  setOption: vi.fn(),
+  resize: vi.fn(),
   dispose: vi.fn(),
+  getOption: vi.fn(() => ({})),
+  showLoading: vi.fn(),
+  hideLoading: vi.fn(),
+  on: vi.fn(),
+  off: vi.fn(),
+});
+
+let mockInstance: ReturnType<typeof createMockInstance>;
+
+vi.mock('echarts/core', () => ({
+  init: vi.fn(() => mockInstance),
+  getInstanceByDom: vi.fn(() => mockInstance),
   use: vi.fn(),
-  getInstanceByDom: vi.fn(),
+  dispose: vi.fn(),
 }));
 
 vi.mock('echarts/renderers', () => ({
@@ -25,6 +29,10 @@ vi.mock('echarts/renderers', () => ({
 
 vi.mock('echarts/charts', () => ({
   SankeyChart: vi.fn(),
+}));
+
+vi.mock('echarts/features', () => ({
+  LabelLayout: vi.fn(),
 }));
 
 describe('Sankey Component', () => {
@@ -41,30 +49,60 @@ describe('Sankey Component', () => {
     ],
   };
 
-  it('should render without crashing', () => {
-    const { container } = render(<Sankey options={defaultOptions} />);
-    expect(container.firstElementChild).toBeInTheDocument();
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockInstance = createMockInstance();
   });
 
-  it('should render a container div', () => {
-    const { container } = render(<Sankey options={defaultOptions} />);
-    const div = container.querySelector('div');
-    expect(div).toBeInTheDocument();
+  describe('ECharts registration', () => {
+    it('should register SankeyChart extension', async () => {
+      const { use } = await import('echarts/core');
+
+      render(<Sankey options={defaultOptions} />);
+
+      await waitFor(() => {
+        expect(use).toHaveBeenCalled();
+      });
+    });
   });
 
-  it('should apply custom className', () => {
-    const { container } = render(
-      <Sankey options={defaultOptions} className="sankey-chart" />,
-    );
-    const div = container.querySelector('div');
-    expect(div).toHaveClass('sankey-chart');
+  describe('Options passing', () => {
+    it('should pass options to ECharts setOption', async () => {
+      render(<Sankey options={defaultOptions} />);
+
+      await waitFor(() => {
+        expect(mockInstance.setOption).toHaveBeenCalledWith(
+          defaultOptions,
+          expect.objectContaining({
+            lazyUpdate: false,
+          }),
+        );
+      });
+    });
   });
 
-  it('should accept ref', async () => {
-    const ref = { current: null };
-    render(<Sankey options={defaultOptions} ref={ref} />);
-    await waitFor(() => {
-      expect(ref.current).toBeDefined();
+  describe('Ref behavior', () => {
+    it('should expose CoreRef with instance method', async () => {
+      const ref = { current: null as any };
+
+      render(<Sankey options={defaultOptions} ref={ref} />);
+
+      await waitFor(() => {
+        expect(ref.current).toBeDefined();
+        expect(ref.current.instance()).toBe(mockInstance);
+      });
+    });
+  });
+
+  describe('Event handling', () => {
+    it('should bind onClick event', async () => {
+      const onClick = vi.fn();
+
+      render(<Sankey options={defaultOptions} onClick={onClick} />);
+
+      await waitFor(() => {
+        expect(mockInstance.on).toHaveBeenCalledWith('click', onClick);
+      });
     });
   });
 });

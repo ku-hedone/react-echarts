@@ -24,6 +24,7 @@ npm install @hedone/react-echart
 - [架构设计](docs/architecture.md) - 组件分层、扩展加载、响应式处理
 - [组件使用指南](docs/component-guide.md) - 安装、用法、配置项、事件处理
 - [开发指南](docs/development-guide.md) - 环境搭建、构建命令、代码规范
+- [测试用例编写指南](docs/testing-guide.md) - 测试目标、反模式、自查清单
 - [API 参考](docs/api-reference.md) - 完整的类型定义和 API 文档
 - [现代化升级路线](docs/modernization-plan.md) - 技术栈升级计划和迁移指南
 - [Roadmap](docs/roadmap.md) - 版本计划和技术决策记录
@@ -182,6 +183,8 @@ export { NewChart };
 3. **扩展加载**：扩展组件由 Adapter 自动管理，通常不需要手动调用 `echarts.use()`。
 
 4. **性能优化**：使用 useMemo/useCallback 缓存 options 和事件处理函数，避免不必要的重渲染。
+
+5. **测试用例**：新增或修改测试时必须参考 [测试用例编写指南](docs/testing-guide.md)。测试应验证行为契约，避免只断言 DOM 存在、mock 不驱动真实路径、异步断言未 await、E2E 没有可观察结果等 false positive。
 
 ## 相关资源
 

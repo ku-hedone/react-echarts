@@ -1,22 +1,26 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, waitFor } from '@testing-library/react';
 import { Funnel } from '../../charts/funnel';
 
-// Mock ECharts
-vi.mock('echarts/core', () => ({
-  init: vi.fn(() => ({
-    setOption: vi.fn(),
-    resize: vi.fn(),
-    dispose: vi.fn(),
-    getOption: vi.fn(() => ({})),
-    showLoading: vi.fn(),
-    hideLoading: vi.fn(),
-    on: vi.fn(),
-    off: vi.fn(),
-  })),
+// Create mock instance
+const createMockInstance = () => ({
+  setOption: vi.fn(),
+  resize: vi.fn(),
   dispose: vi.fn(),
+  getOption: vi.fn(() => ({})),
+  showLoading: vi.fn(),
+  hideLoading: vi.fn(),
+  on: vi.fn(),
+  off: vi.fn(),
+});
+
+let mockInstance: ReturnType<typeof createMockInstance>;
+
+vi.mock('echarts/core', () => ({
+  init: vi.fn(() => mockInstance),
+  getInstanceByDom: vi.fn(() => mockInstance),
   use: vi.fn(),
-  getInstanceByDom: vi.fn(),
+  dispose: vi.fn(),
 }));
 
 vi.mock('echarts/renderers', () => ({
@@ -29,6 +33,10 @@ vi.mock('echarts/charts', () => ({
 
 vi.mock('echarts/components', () => ({
   GridComponent: vi.fn(),
+}));
+
+vi.mock('echarts/features', () => ({
+  LabelLayout: vi.fn(),
 }));
 
 describe('Funnel Component', () => {
@@ -47,48 +55,81 @@ describe('Funnel Component', () => {
     ],
   };
 
-  it('should render without crashing', () => {
-    const { container } = render(<Funnel options={defaultOptions} />);
-    expect(container.firstElementChild).toBeInTheDocument();
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockInstance = createMockInstance();
   });
 
-  it('should render a container div', () => {
-    const { container } = render(<Funnel options={defaultOptions} />);
-    const div = container.querySelector('div');
-    expect(div).toBeInTheDocument();
-  });
+  describe('ECharts registration', () => {
+    it('should register FunnelChart extension', async () => {
+      const { use } = await import('echarts/core');
 
-  it('should apply custom className', () => {
-    const { container } = render(
-      <Funnel options={defaultOptions} className="funnel-chart" />,
-    );
-    const div = container.querySelector('div');
-    expect(div).toHaveClass('funnel-chart');
-  });
+      render(<Funnel options={defaultOptions} />);
 
-  it('should accept ref', async () => {
-    const ref = { current: null };
-    render(<Funnel options={defaultOptions} ref={ref} />);
-    await waitFor(() => {
-      expect(ref.current).toBeDefined();
+      await waitFor(() => {
+        expect(use).toHaveBeenCalled();
+      });
     });
   });
 
-  it('should handle ascending sort', () => {
-    const ascendingOptions = {
-      series: [
-        {
-          type: 'funnel' as const,
-          sort: 'ascending' as const,
-          data: [
-            { value: 60, name: 'Visit' },
-            { value: 40, name: 'Inquiry' },
-            { value: 20, name: 'Order' },
-          ],
-        },
-      ],
-    };
-    const { container } = render(<Funnel options={ascendingOptions} />);
-    expect(container.firstElementChild).toBeInTheDocument();
+  describe('Options passing', () => {
+    it('should pass options to ECharts setOption', async () => {
+      render(<Funnel options={defaultOptions} />);
+
+      await waitFor(() => {
+        expect(mockInstance.setOption).toHaveBeenCalledWith(
+          defaultOptions,
+          expect.objectContaining({
+            lazyUpdate: false,
+          }),
+        );
+      });
+    });
+
+    it('should handle ascending sort', async () => {
+      const ascendingOptions = {
+        series: [
+          {
+            type: 'funnel' as const,
+            sort: 'ascending' as const,
+            data: defaultOptions.series[0].data,
+          },
+        ],
+      };
+
+      render(<Funnel options={ascendingOptions} />);
+
+      await waitFor(() => {
+        expect(mockInstance.setOption).toHaveBeenCalledWith(
+          ascendingOptions,
+          expect.any(Object),
+        );
+      });
+    });
+  });
+
+  describe('Ref behavior', () => {
+    it('should expose CoreRef with instance method', async () => {
+      const ref = { current: null as any };
+
+      render(<Funnel options={defaultOptions} ref={ref} />);
+
+      await waitFor(() => {
+        expect(ref.current).toBeDefined();
+        expect(ref.current.instance()).toBe(mockInstance);
+      });
+    });
+  });
+
+  describe('Event handling', () => {
+    it('should bind onClick event', async () => {
+      const onClick = vi.fn();
+
+      render(<Funnel options={defaultOptions} onClick={onClick} />);
+
+      await waitFor(() => {
+        expect(mockInstance.on).toHaveBeenCalledWith('click', onClick);
+      });
+    });
   });
 });

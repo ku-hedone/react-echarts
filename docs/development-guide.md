@@ -75,6 +75,8 @@ react-echart/
 
 ## 3. 常用命令
 
+测试用例编写规范见 [测试用例编写指南](./testing-guide.md)。
+
 ### 3.1 开发命令
 
 ```bash

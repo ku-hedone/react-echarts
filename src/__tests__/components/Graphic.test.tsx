@@ -1,22 +1,26 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, waitFor } from '@testing-library/react';
 import { Graphic } from '../../charts/graphic';
 
-// Mock ECharts
-vi.mock('echarts/core', () => ({
-  init: vi.fn(() => ({
-    setOption: vi.fn(),
-    resize: vi.fn(),
-    dispose: vi.fn(),
-    getOption: vi.fn(() => ({})),
-    showLoading: vi.fn(),
-    hideLoading: vi.fn(),
-    on: vi.fn(),
-    off: vi.fn(),
-  })),
+// Create mock instance
+const createMockInstance = () => ({
+  setOption: vi.fn(),
+  resize: vi.fn(),
   dispose: vi.fn(),
+  getOption: vi.fn(() => ({})),
+  showLoading: vi.fn(),
+  hideLoading: vi.fn(),
+  on: vi.fn(),
+  off: vi.fn(),
+});
+
+let mockInstance: ReturnType<typeof createMockInstance>;
+
+vi.mock('echarts/core', () => ({
+  init: vi.fn(() => mockInstance),
+  getInstanceByDom: vi.fn(() => mockInstance),
   use: vi.fn(),
-  getInstanceByDom: vi.fn(),
+  dispose: vi.fn(),
 }));
 
 vi.mock('echarts/renderers', () => ({
@@ -24,7 +28,11 @@ vi.mock('echarts/renderers', () => ({
 }));
 
 vi.mock('../../components/GraphicComponent', () => ({
-  default: 'GraphicComponent',
+  default: vi.fn(),
+}));
+
+vi.mock('echarts/features', () => ({
+  LabelLayout: vi.fn(),
 }));
 
 describe('Graphic Component', () => {
@@ -41,43 +49,83 @@ describe('Graphic Component', () => {
     },
   };
 
-  it('should render without crashing', () => {
-    const { container } = render(<Graphic options={defaultOptions} uuid={1} />);
-    expect(container.firstElementChild).toBeInTheDocument();
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockInstance = createMockInstance();
   });
 
-  it('should render a container div', () => {
-    const { container } = render(<Graphic options={defaultOptions} uuid={1} />);
-    const div = container.querySelector('div');
-    expect(div).toBeInTheDocument();
+  describe('ECharts registration', () => {
+    it('should register GraphicComponent extension', async () => {
+      const { use } = await import('echarts/core');
+
+      render(<Graphic options={defaultOptions} uuid={1} />);
+
+      await waitFor(() => {
+        expect(use).toHaveBeenCalled();
+      });
+    });
   });
 
-  it('should apply custom className', () => {
-    const { container } = render(
-      <Graphic options={defaultOptions} uuid={1} className="graphic-chart" />,
-    );
-    const div = container.querySelector('div');
-    expect(div).toHaveClass('graphic-chart');
+  describe('Options passing', () => {
+    it('should pass options to ECharts setOption', async () => {
+      render(<Graphic options={defaultOptions} uuid={1} />);
+
+      await waitFor(() => {
+        expect(mockInstance.setOption).toHaveBeenCalledWith(
+          defaultOptions,
+          expect.objectContaining({
+            lazyUpdate: false,
+          }),
+        );
+      });
+    });
+
+    it('should handle multiple graphic elements', async () => {
+      const multiGraphicOptions = {
+        graphic: [
+          {
+            type: 'text',
+            left: 'center',
+            top: 'center',
+            style: { text: 'Title' },
+          },
+          {
+            type: 'rect',
+            left: 10,
+            top: 10,
+            shape: { width: 100, height: 50 },
+          },
+        ],
+      };
+
+      render(<Graphic options={multiGraphicOptions} uuid={2} />);
+
+      await waitFor(() => {
+        expect(mockInstance.setOption).toHaveBeenCalledWith(
+          multiGraphicOptions,
+          expect.any(Object),
+        );
+      });
+    });
   });
 
-  it('should handle multiple graphic elements', () => {
-    const multiGraphicOptions = {
-      graphic: [
-        {
-          type: 'text',
-          left: 'center',
-          top: 'center',
-          style: { text: 'Title' },
-        },
-        {
-          type: 'rect',
-          left: 10,
-          top: 10,
-          shape: { width: 100, height: 50 },
-        },
-      ],
-    };
-    const { container } = render(<Graphic options={multiGraphicOptions} uuid={2} />);
-    expect(container.firstElementChild).toBeInTheDocument();
+  describe('Props forwarding', () => {
+    it('should forward style prop', () => {
+      const { container } = render(
+        <Graphic options={defaultOptions} uuid={1} style={{ width: '500px' }} />,
+      );
+
+      const div = container.querySelector('div');
+      expect(div).toHaveStyle({ width: '500px' });
+    });
+
+    it('should forward className prop', () => {
+      const { container } = render(
+        <Graphic options={defaultOptions} uuid={1} className="graphic-chart" />,
+      );
+
+      const div = container.querySelector('div');
+      expect(div).toHaveClass('graphic-chart');
+    });
   });
 });

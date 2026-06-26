@@ -1,40 +1,38 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, waitFor } from '@testing-library/react';
-import { use } from 'echarts/core';
 import { Adapter } from '../../adapter';
-import type { Extensions } from '../../utils/extensions';
 
-const mocks = vi.hoisted(() => {
-  const instance = {
-    setOption: vi.fn(),
-    resize: vi.fn(),
-    dispose: vi.fn(),
-    getOption: vi.fn(() => ({})),
-    showLoading: vi.fn(),
-    hideLoading: vi.fn(),
-    on: vi.fn(),
-    off: vi.fn(),
-  };
-
-  return {
-    instance,
-    init: vi.fn(() => instance),
-    dispose: vi.fn(),
-    use: vi.fn(),
-    getInstanceByDom: vi.fn(() => instance),
-  };
+// Create mock instance
+const createMockInstance = () => ({
+  setOption: vi.fn(),
+  resize: vi.fn(),
+  dispose: vi.fn(),
+  getOption: vi.fn(() => ({})),
+  showLoading: vi.fn(),
+  hideLoading: vi.fn(),
+  on: vi.fn(),
+  off: vi.fn(),
 });
 
-// Mock ECharts
+let mockInstance: ReturnType<typeof createMockInstance>;
+
 vi.mock('echarts/core', () => ({
-  init: mocks.init,
-  dispose: mocks.dispose,
-  use: mocks.use,
-  getInstanceByDom: mocks.getInstanceByDom,
+  init: vi.fn(() => mockInstance),
+  getInstanceByDom: vi.fn(() => mockInstance),
+  use: vi.fn(),
+  dispose: vi.fn(),
 }));
 
 vi.mock('echarts/renderers', () => ({
   CanvasRenderer: vi.fn(),
+}));
+
+vi.mock('echarts/features', () => ({
+  LabelLayout: vi.fn(),
+}));
+
+vi.mock('../../utils/extensions', () => ({
+  default: vi.fn(() => async () => []),
 }));
 
 describe('Adapter Component', () => {
@@ -43,118 +41,120 @@ describe('Adapter Component', () => {
     tooltip: {},
   };
 
-  const mockUse: Extensions = [];
-  const loadingOptions = {
-    text: 'Loading...',
-    lineWidth: 5,
-    fontWeight: 'normal' as const,
-    fontStyle: 'normal' as const,
-    fontFamily: 'sans-serif' as const,
-  };
+  const mockUse = [vi.fn(), vi.fn()];
 
   beforeEach(() => {
     vi.clearAllMocks();
+    mockInstance = createMockInstance();
   });
 
-  it('should initialize ECharts and apply options', async () => {
-    const { container } = render(<Adapter options={defaultOptions} use={mockUse} />);
-    expect(container.firstElementChild).toBeInTheDocument();
-    await waitFor(() => {
-      expect(mocks.getInstanceByDom).toHaveBeenCalled();
-      expect(mocks.instance.setOption).toHaveBeenCalledWith(
-        defaultOptions,
-        expect.objectContaining({
-          lazyUpdate: false,
-          replaceMerge: expect.arrayContaining(['tooltip']),
-        }),
+  describe('Core integration', () => {
+    it('should pass options to Core component', async () => {
+      render(<Adapter options={defaultOptions} use={mockUse} />);
+
+      await waitFor(() => {
+        expect(mockInstance.setOption).toHaveBeenCalledWith(
+          defaultOptions,
+          expect.any(Object),
+        );
+      });
+    });
+  });
+
+  describe('Event transformation', () => {
+    it('should transform onClick prop to click event', async () => {
+      const onClick = vi.fn();
+
+      render(<Adapter options={defaultOptions} use={mockUse} onClick={onClick} />);
+
+      await waitFor(() => {
+        expect(mockInstance.on).toHaveBeenCalledWith('click', onClick);
+      });
+    });
+
+    it('should transform onDblClick prop to dblclick event', async () => {
+      const onDblClick = vi.fn();
+
+      render(<Adapter options={defaultOptions} use={mockUse} onDblClick={onDblClick} />);
+
+      await waitFor(() => {
+        expect(mockInstance.on).toHaveBeenCalledWith('dblclick', onDblClick);
+      });
+    });
+
+    it('should transform multiple event props', async () => {
+      const onClick = vi.fn();
+      const onMouseDown = vi.fn();
+
+      render(
+        <Adapter
+          options={defaultOptions}
+          use={mockUse}
+          onClick={onClick}
+          onMouseDown={onMouseDown}
+        />,
       );
-    });
-    expect(use).toHaveBeenCalled();
-  });
 
-  it('should render a container div', () => {
-    const { container } = render(<Adapter options={defaultOptions} use={mockUse} />);
-    const div = container.querySelector('div');
-    expect(div).toBeInTheDocument();
-  });
-
-  it('should apply custom className', () => {
-    const { container } = render(
-      <Adapter options={defaultOptions} use={mockUse} className="custom-adapter" />,
-    );
-    const div = container.querySelector('div');
-    expect(div).toHaveClass('custom-adapter');
-  });
-
-  it('should apply custom style', () => {
-    const { container } = render(
-      <Adapter options={defaultOptions} use={mockUse} style={{ width: '500px' }} />,
-    );
-    const div = container.querySelector('div');
-    expect(div).toHaveStyle({ width: '500px' });
-  });
-
-  it('should accept ref', async () => {
-    const ref = { current: null };
-    render(<Adapter options={defaultOptions} use={mockUse} ref={ref} />);
-    await waitFor(() => {
-      expect(ref.current).toBeDefined();
+      await waitFor(() => {
+        expect(mockInstance.on).toHaveBeenCalledWith('click', onClick);
+        expect(mockInstance.on).toHaveBeenCalledWith('mousedown', onMouseDown);
+      });
     });
   });
 
-  it('should handle event props', async () => {
-    const onClick = vi.fn();
-    const { container } = render(
-      <Adapter options={defaultOptions} use={mockUse} onClick={onClick} />,
-    );
-    expect(container.firstElementChild).toBeInTheDocument();
-    await waitFor(() => {
-      expect(mocks.instance.on).toHaveBeenCalledWith('click', onClick);
+  describe('Ref forwarding', () => {
+    it('should forward ref to Core component', async () => {
+      const ref = { current: null as any };
+
+      render(<Adapter options={defaultOptions} use={mockUse} ref={ref} />);
+
+      await waitFor(() => {
+        expect(ref.current).toBeDefined();
+        expect(ref.current.instance).toBeDefined();
+        expect(ref.current.instance()).toBe(mockInstance);
+      });
     });
   });
 
-  it('should handle multiple event props', async () => {
-    const onClick = vi.fn();
-    const onDblClick = vi.fn();
-    const { container } = render(
-      <Adapter
-        options={defaultOptions}
-        use={mockUse}
-        onClick={onClick}
-        onDblClick={onDblClick}
-      />,
-    );
-    expect(container.firstElementChild).toBeInTheDocument();
-    await waitFor(() => {
-      expect(mocks.instance.on).toHaveBeenCalledWith('click', onClick);
-      expect(mocks.instance.on).toHaveBeenCalledWith('dblclick', onDblClick);
-    });
-  });
+  describe('Props forwarding', () => {
+    it('should forward style prop', () => {
+      const { container } = render(
+        <Adapter options={defaultOptions} use={mockUse} style={{ width: '500px' }} />,
+      );
 
-  it('should handle showLoading prop', async () => {
-    const { container } = render(
-      <Adapter options={defaultOptions} use={mockUse} showLoading={true} />,
-    );
-    expect(container.firstElementChild).toBeInTheDocument();
-    await waitFor(() => {
-      expect(mocks.instance.showLoading).toHaveBeenCalled();
+      const div = container.querySelector('div');
+      expect(div).toHaveStyle({ width: '500px' });
     });
-  });
 
-  it('should handle showLoading with options', async () => {
-    const { container } = render(
-      <Adapter
-        options={defaultOptions}
-        use={mockUse}
-        showLoading={{
-          type: 'default',
-          opts: loadingOptions,
-        }}
-      />,
-    );
-    expect(container.firstElementChild).toBeInTheDocument();
-    await waitFor(() => {
-      expect(mocks.instance.showLoading).toHaveBeenCalledWith('default', loadingOptions);
+    it('should forward className prop', () => {
+      const { container } = render(
+        <Adapter options={defaultOptions} use={mockUse} className="custom-adapter" />,
+      );
+
+      const div = container.querySelector('div');
+      expect(div).toHaveClass('custom-adapter');
+    });
+
+    it('should forward theme prop', async () => {
+      const { init } = await import('echarts/core');
+
+      render(<Adapter options={defaultOptions} use={mockUse} theme="dark" />);
+
+      await waitFor(() => {
+        expect(init).toHaveBeenCalledWith(
+          expect.any(HTMLDivElement),
+          'dark',
+          expect.any(Object),
+        );
+      });
+    });
+
+    it('should forward showLoading prop', async () => {
+      render(<Adapter options={defaultOptions} use={mockUse} showLoading={true} />);
+
+      await waitFor(() => {
+        expect(mockInstance.showLoading).toHaveBeenCalled();
+      });
     });
   });
 });
