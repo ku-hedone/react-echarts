@@ -14,10 +14,14 @@
 
 - [x] 添加 Ladle 组件文档（Storybook 轻量替代）
 
+## 已完成
+
+- [x] Bundle 大小分析和优化（28KB ESM，支持 Tree-shaking）
+- [x] 补充 ECharts 6.x 新特性文档
+
 ## 进行中
 
-- [ ] Bundle 大小分析和优化
-- [ ] 补充 ECharts 6.x 新特性
+- [ ] 配置 CI/CD 自动化流程
 
 ## 计划中
 

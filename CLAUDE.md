@@ -28,6 +28,8 @@ npm install @hedone/react-echart
 - [API 参考](docs/api-reference.md) - 完整的类型定义和 API 文档
 - [现代化升级路线](docs/modernization-plan.md) - 技术栈升级计划和迁移指南
 - [Roadmap](docs/roadmap.md) - 版本计划和技术决策记录
+- [Bundle 分析](docs/bundle-analysis.md) - 包大小分析和优化策略
+- [ECharts 6.x 新特性](docs/echarts6-features.md) - ECharts 6.0 功能支持
 
 ## 技术栈
 
