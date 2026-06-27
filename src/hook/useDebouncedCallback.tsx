@@ -71,8 +71,8 @@ export const useDebouncedCallback = <T extends (...args: any[]) => ReturnType<T>
         cancelAnimationFrame(timerId.current);
       }
       timerId.current = useRAF
-        ? requestAnimationFrame(pendingFunc)
-        : setTimeout(pendingFunc, wait);
+        ? window.requestAnimationFrame(pendingFunc)
+        : window.setTimeout(pendingFunc, wait);
     };
 
     const shouldInvoke = (time: number) => {

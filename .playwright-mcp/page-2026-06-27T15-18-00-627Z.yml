@@ -1,0 +1,91 @@
+- generic [ref=e3]:
+  - main [ref=e4]
+  - separator [ref=e5]
+  - navigation [ref=e6]:
+    - textbox "Search stories" [ref=e7]:
+      - /placeholder: Search
+    - tree [ref=e8]:
+      - treeitem "Basic" [expanded] [ref=e9]:
+        - generic "Basic" [ref=e10] [cursor=pointer]:
+          - img [ref=e12]
+          - generic [ref=e15]: Basic
+        - group [ref=e16]:
+          - treeitem "Auto size" [expanded] [ref=e17]:
+            - generic [ref=e18]:
+              - img [ref=e20]
+              - link "Auto size" [ref=e22] [cursor=pointer]:
+                - /url: "?story=basic--auto-size"
+          - treeitem "Default" [ref=e23]:
+            - generic [ref=e24]:
+              - img [ref=e26]
+              - link "Default" [ref=e28] [cursor=pointer]:
+                - /url: "?story=basic--default"
+          - treeitem "Different cols" [ref=e29]:
+            - generic [ref=e30]:
+              - img [ref=e32]
+              - link "Different cols" [ref=e34] [cursor=pointer]:
+                - /url: "?story=basic--different-cols"
+          - treeitem "Max rows" [ref=e35]:
+            - generic [ref=e36]:
+              - img [ref=e38]
+              - link "Max rows" [ref=e40] [cursor=pointer]:
+                - /url: "?story=basic--max-rows"
+          - treeitem "With container padding" [ref=e41]:
+            - generic [ref=e42]:
+              - img [ref=e44]
+              - link "With container padding" [ref=e46] [cursor=pointer]:
+                - /url: "?story=basic--with-container-padding"
+          - treeitem "With margin" [ref=e47]:
+            - generic [ref=e48]:
+              - img [ref=e50]
+              - link "With margin" [ref=e52] [cursor=pointer]:
+                - /url: "?story=basic--with-margin"
+      - treeitem "Custom style" [ref=e53]:
+        - generic "Custom style" [ref=e54] [cursor=pointer]:
+          - img [ref=e56]
+          - generic [ref=e59]: Custom style
+      - treeitem "Draggable" [ref=e60]:
+        - generic "Draggable" [ref=e61] [cursor=pointer]:
+          - img [ref=e63]
+          - generic [ref=e66]: Draggable
+      - treeitem "Dropping" [ref=e67]:
+        - generic "Dropping" [ref=e68] [cursor=pointer]:
+          - img [ref=e70]
+          - generic [ref=e73]: Dropping
+      - treeitem "Overlap" [ref=e74]:
+        - generic "Overlap" [ref=e75] [cursor=pointer]:
+          - img [ref=e77]
+          - generic [ref=e80]: Overlap
+      - treeitem "Playground" [ref=e81]:
+        - generic "Playground" [ref=e82] [cursor=pointer]:
+          - img [ref=e84]
+          - generic [ref=e87]: Playground
+      - treeitem "Resizable" [ref=e88]:
+        - generic "Resizable" [ref=e89] [cursor=pointer]:
+          - img [ref=e91]
+          - generic [ref=e94]: Resizable
+      - treeitem "Responsive" [ref=e95]:
+        - generic "Responsive" [ref=e96] [cursor=pointer]:
+          - img [ref=e98]
+          - generic [ref=e101]: Responsive
+      - treeitem "Static" [ref=e102]:
+        - generic "Static" [ref=e103] [cursor=pointer]:
+          - img [ref=e105]
+          - generic [ref=e108]: Static
+  - banner [ref=e109]:
+    - list [ref=e110]:
+      - listitem [ref=e111]:
+        - button "Switch to dark theme." [ref=e112] [cursor=pointer]:
+          - img [ref=e113]
+      - listitem [ref=e117]:
+        - button "Open fullscreen mode. Can be toggled by pressing f." [ref=e118] [cursor=pointer]:
+          - img [ref=e119]
+      - listitem [ref=e122]:
+        - button "Change the story viewport." [ref=e123] [cursor=pointer]:
+          - img [ref=e124]
+      - listitem [ref=e128]:
+        - button "Show the story source code." [ref=e129] [cursor=pointer]:
+          - img [ref=e130]
+      - listitem [ref=e133]:
+        - button "Get more information about Ladle." [ref=e134] [cursor=pointer]:
+          - img [ref=e135]

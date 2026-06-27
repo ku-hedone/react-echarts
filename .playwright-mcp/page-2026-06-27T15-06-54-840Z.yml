@@ -1,0 +1,59 @@
+- generic [ref=e3]:
+  - main [ref=e4]:
+    - generic [ref=e7]:
+      - heading "Story not found" [level=1] [ref=e8]
+      - paragraph [ref=e9]:
+        - text: The story id
+        - code [ref=e10]: playground--bar-playground
+        - text: you are trying to open does not exist. Typo?
+      - paragraph [ref=e11]:
+        - link "Back to home" [ref=e12] [cursor=pointer]:
+          - /url: /
+      - paragraph [ref=e13]:
+        - link "GitHub" [ref=e14] [cursor=pointer]:
+          - /url: https://github.com/tajo/ladle
+      - paragraph [ref=e15]:
+        - link "Docs" [ref=e16] [cursor=pointer]:
+          - /url: https://www.ladle.dev
+  - separator [ref=e17]
+  - navigation [ref=e18]:
+    - textbox "Search stories" [ref=e19]:
+      - /placeholder: Search
+    - tree [ref=e20]:
+      - treeitem "Bar" [ref=e21]:
+        - generic "Bar" [ref=e22] [cursor=pointer]:
+          - img [ref=e24]
+          - generic [ref=e27]: Bar
+      - treeitem "Funnel" [ref=e28]:
+        - generic "Funnel" [ref=e29] [cursor=pointer]:
+          - img [ref=e31]
+          - generic [ref=e34]: Funnel
+      - treeitem "Gauge" [ref=e35]:
+        - generic "Gauge" [ref=e36] [cursor=pointer]:
+          - img [ref=e38]
+          - generic [ref=e41]: Gauge
+      - treeitem "Line" [ref=e42]:
+        - generic "Line" [ref=e43] [cursor=pointer]:
+          - img [ref=e45]
+          - generic [ref=e48]: Line
+      - treeitem "Pie" [ref=e49]:
+        - generic "Pie" [ref=e50] [cursor=pointer]:
+          - img [ref=e52]
+          - generic [ref=e55]: Pie
+  - banner [ref=e56]:
+    - list [ref=e57]:
+      - listitem [ref=e58]:
+        - button "Switch to dark theme." [ref=e59] [cursor=pointer]:
+          - img [ref=e60]
+      - listitem [ref=e64]:
+        - button "Open fullscreen mode. Can be toggled by pressing f." [ref=e65] [cursor=pointer]:
+          - img [ref=e66]
+      - listitem [ref=e69]:
+        - button "Change the story viewport." [ref=e70] [cursor=pointer]:
+          - img [ref=e71]
+      - listitem [ref=e75]:
+        - button "Show the story source code." [ref=e76] [cursor=pointer]:
+          - img [ref=e77]
+      - listitem [ref=e80]:
+        - button "Get more information about Ladle." [ref=e81] [cursor=pointer]:
+          - img [ref=e82]

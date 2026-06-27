@@ -1,0 +1,50 @@
+- generic [ref=e3]:
+  - main [ref=e4]
+  - separator [ref=e5]
+  - navigation [ref=e6]:
+    - textbox "Search stories" [ref=e7]:
+      - /placeholder: Search
+    - tree [ref=e8]:
+      - treeitem "Bar" [expanded] [ref=e9]:
+        - generic "Bar" [ref=e10] [cursor=pointer]:
+          - img [ref=e12]
+          - generic [ref=e15]: Bar
+        - group [ref=e16]:
+          - treeitem "Bar playground" [expanded] [ref=e17]:
+            - generic [ref=e18]:
+              - img [ref=e20]
+              - link "Bar playground" [ref=e22] [cursor=pointer]:
+                - /url: "?story=bar--bar-playground"
+      - treeitem "Funnel" [ref=e23]:
+        - generic "Funnel" [ref=e24] [cursor=pointer]:
+          - img [ref=e26]
+          - generic [ref=e29]: Funnel
+      - treeitem "Gauge" [ref=e30]:
+        - generic "Gauge" [ref=e31] [cursor=pointer]:
+          - img [ref=e33]
+          - generic [ref=e36]: Gauge
+      - treeitem "Line" [ref=e37]:
+        - generic "Line" [ref=e38] [cursor=pointer]:
+          - img [ref=e40]
+          - generic [ref=e43]: Line
+      - treeitem "Pie" [ref=e44]:
+        - generic "Pie" [ref=e45] [cursor=pointer]:
+          - img [ref=e47]
+          - generic [ref=e50]: Pie
+  - banner [ref=e51]:
+    - list [ref=e52]:
+      - listitem [ref=e53]:
+        - button "Switch to dark theme." [ref=e54] [cursor=pointer]:
+          - img [ref=e55]
+      - listitem [ref=e59]:
+        - button "Open fullscreen mode. Can be toggled by pressing f." [ref=e60] [cursor=pointer]:
+          - img [ref=e61]
+      - listitem [ref=e64]:
+        - button "Change the story viewport." [ref=e65] [cursor=pointer]:
+          - img [ref=e66]
+      - listitem [ref=e70]:
+        - button "Show the story source code." [ref=e71] [cursor=pointer]:
+          - img [ref=e72]
+      - listitem [ref=e75]:
+        - button "Get more information about Ladle." [ref=e76] [cursor=pointer]:
+          - img [ref=e77]

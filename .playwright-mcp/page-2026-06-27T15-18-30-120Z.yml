@@ -1,0 +1,75 @@
+- generic [ref=e3]:
+  - main [ref=e4]:
+    - generic [ref=e5]:
+      - heading "Story not found" [level=1] [ref=e6]
+      - paragraph [ref=e7]:
+        - text: The story id
+        - code [ref=e8]: playground-bar--bar-playground
+        - text: you are trying to open does not exist. Typo?
+      - paragraph [ref=e9]:
+        - link "Back to home" [ref=e10] [cursor=pointer]:
+          - /url: /
+      - paragraph [ref=e11]:
+        - link "GitHub" [ref=e12] [cursor=pointer]:
+          - /url: https://github.com/tajo/ladle
+      - paragraph [ref=e13]:
+        - link "Docs" [ref=e14] [cursor=pointer]:
+          - /url: https://www.ladle.dev
+  - separator [ref=e15]
+  - navigation [ref=e16]:
+    - textbox "Search stories" [ref=e17]:
+      - /placeholder: Search
+    - tree [ref=e18]:
+      - treeitem "Basic" [ref=e19]:
+        - generic "Basic" [ref=e20] [cursor=pointer]:
+          - img [ref=e22]
+          - generic [ref=e25]: Basic
+      - treeitem "Custom style" [ref=e26]:
+        - generic "Custom style" [ref=e27] [cursor=pointer]:
+          - img [ref=e29]
+          - generic [ref=e32]: Custom style
+      - treeitem "Draggable" [ref=e33]:
+        - generic "Draggable" [ref=e34] [cursor=pointer]:
+          - img [ref=e36]
+          - generic [ref=e39]: Draggable
+      - treeitem "Dropping" [ref=e40]:
+        - generic "Dropping" [ref=e41] [cursor=pointer]:
+          - img [ref=e43]
+          - generic [ref=e46]: Dropping
+      - treeitem "Overlap" [ref=e47]:
+        - generic "Overlap" [ref=e48] [cursor=pointer]:
+          - img [ref=e50]
+          - generic [ref=e53]: Overlap
+      - treeitem "Playground" [ref=e54]:
+        - generic "Playground" [ref=e55] [cursor=pointer]:
+          - img [ref=e57]
+          - generic [ref=e60]: Playground
+      - treeitem "Resizable" [ref=e61]:
+        - generic "Resizable" [ref=e62] [cursor=pointer]:
+          - img [ref=e64]
+          - generic [ref=e67]: Resizable
+      - treeitem "Responsive" [ref=e68]:
+        - generic "Responsive" [ref=e69] [cursor=pointer]:
+          - img [ref=e71]
+          - generic [ref=e74]: Responsive
+      - treeitem "Static" [ref=e75]:
+        - generic "Static" [ref=e76] [cursor=pointer]:
+          - img [ref=e78]
+          - generic [ref=e81]: Static
+  - banner [ref=e82]:
+    - list [ref=e83]:
+      - listitem [ref=e84]:
+        - button "Switch to dark theme." [ref=e85] [cursor=pointer]:
+          - img [ref=e86]
+      - listitem [ref=e90]:
+        - button "Open fullscreen mode. Can be toggled by pressing f." [ref=e91] [cursor=pointer]:
+          - img [ref=e92]
+      - listitem [ref=e95]:
+        - button "Change the story viewport." [ref=e96] [cursor=pointer]:
+          - img [ref=e97]
+      - listitem [ref=e101]:
+        - button "Show the story source code." [ref=e102] [cursor=pointer]:
+          - img [ref=e103]
+      - listitem [ref=e106]:
+        - button "Get more information about Ladle." [ref=e107] [cursor=pointer]:
+          - img [ref=e108]
