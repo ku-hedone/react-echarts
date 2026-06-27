@@ -30,6 +30,7 @@ npm install @hedone/react-echart
 - [Roadmap](docs/roadmap.md) - 版本计划和技术决策记录
 - [Bundle 分析](docs/bundle-analysis.md) - 包大小分析和优化策略
 - [ECharts 6.x 新特性](docs/echarts6-features.md) - ECharts 6.0 功能支持
+- [容器高度说明](docs/container-height.md) - 高度问题和解决方案
 
 ## 技术栈
 

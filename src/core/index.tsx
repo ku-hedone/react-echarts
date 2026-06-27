@@ -47,7 +47,8 @@ const defaultHeight = '300px';
 
 const defaultStyle: CSSProperties = {
   width: '100%',
-  height: '400px',
+  minHeight: '300px',
+  height: '100%',
 };
 
 export const Core = memo(
@@ -209,9 +210,22 @@ export const Core = memo(
          * so need prevent ref clear into empty
          */
         if (dom.current) {
+          const clientHeight = dom.current.clientHeight;
+
+          // Warn if container has no explicit height
+          if (clientHeight < 100) {
+            console.warn(
+              '[react-echart] Container height is very small (' +
+                clientHeight +
+                'px). ' +
+                'For best results, set an explicit height on the container or use the style prop: ' +
+                '<Chart style={{ height: "400px" }} />',
+            );
+          }
+
           const opts = {
             width: dom.current.clientWidth,
-            height: dom.current.clientHeight || defaultHeight,
+            height: clientHeight || defaultHeight,
             renderer: 'canvas',
           } as const;
           init(dom.current, theme, opts);
