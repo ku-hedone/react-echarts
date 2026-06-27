@@ -8,20 +8,28 @@
 - [x] 优化 ECharts 导入（统一从 echarts/core 导入运行时代码）
 - [x] 移除 forwardRef，使用 React 19 的 ref as prop 特性
 - [x] 搭建测试体系（Vitest + React Testing Library + Playwright）
+- [x] 测试覆盖率 95%+（超过 80% 目标）
+
+## 已完成
+
+- [x] 添加 Ladle 组件文档（Storybook 轻量替代）
+
+## 进行中
+
+- [ ] Bundle 大小分析和优化
+- [ ] 补充 ECharts 6.x 新特性
 
 ## 计划中
 
 ### 短期（1-2 个月）
 
-- [ ] 增加测试覆盖率（目标 80%+）
-- [ ] 添加 Storybook 组件文档
 - [ ] 配置 CI/CD 自动化流程
+- [ ] 发布 v0.4.0 稳定版本
 
 ### 中期（3-6 个月）
 
-- [ ] 支持 ECharts 6.x 新特性（如 SSR 增强）
 - [ ] 添加更多图表类型（Treemap, Graph, Parallel 等）
-- [ ] 性能优化和 bundle 大小分析
+- [ ] 性能优化和 tree-shaking 增强
 
 ### 长期（6+ 个月）
 

@@ -50,9 +50,12 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:install": "playwright install",
-    "prepare": "husky"
+    "prepare": "husky",
+    "storybook": "ladle serve",
+    "storybook:build": "ladle build"
   },
   "devDependencies": {
+    "@ladle/react": "^5.1.1",
     "@playwright/test": "^1.52.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.2",

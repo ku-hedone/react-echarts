@@ -40,6 +40,7 @@ npm install @hedone/react-echart
 - **Formatter**：oxfmt 0.56（Rust 编写，比 Prettier 快 35 倍+）
 - **单元测试**：Vitest 4.x + React Testing Library
 - **E2E 测试**：Playwright 1.61
+- **组件文档**：Ladle 5.x（Storybook 轻量替代）
 
 ## 常用命令
 
@@ -73,6 +74,10 @@ pnpm run test:coverage  # 覆盖率报告
 pnpm run test:e2e       # 运行 E2E 测试
 pnpm run test:e2e:ui    # 打开 Playwright UI
 pnpm run test:e2e:install  # 安装浏览器
+
+# 组件文档（Ladle）
+pnpm run storybook      # 启动文档服务器
+pnpm run storybook:build  # 构建静态文档
 ```
 
 ## 项目结构
