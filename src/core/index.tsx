@@ -46,7 +46,8 @@ const removeBind = connect('off');
 const defaultHeight = '300px';
 
 const defaultStyle: CSSProperties = {
-  height: '100%',
+  width: '100%',
+  height: '400px',
 };
 
 export const Core = memo(
